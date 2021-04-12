@@ -1,0 +1,1 @@
+# InfoCovid_Android
