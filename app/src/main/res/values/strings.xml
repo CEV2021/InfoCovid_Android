@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">InfoCovid</string>
+    <string name="graphicsName">Incidencia Acumulada</string>
+    <string name="homeName">Home</string>
+    <string name="searchName">Buscar Ubicacion</string>
+    <string name="settingsName">Ajustes</string>
+</resources>

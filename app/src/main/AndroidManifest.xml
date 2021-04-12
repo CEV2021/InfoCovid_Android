@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.infocovid">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launchericoncovid"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launchericoncovid"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.InfoCovid">
+        <activity android:name="com.example.infocovid.SettingsActivity"></activity>
+        <activity android:name="com.example.infocovid.LocationsActivity" />
+        <activity android:name="com.example.infocovid.DetailActivity" />
+        <activity android:name="com.example.infocovid.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
