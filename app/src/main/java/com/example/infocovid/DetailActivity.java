@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -25,21 +26,25 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                if (menuItem.getItemId() == R.id.menu_home) {
-                    setContentView(R.layout.activity_main);
-                }
-                if (menuItem.getItemId() == R.id.menu_graphics) {
-                    setContentView(R.layout.activity_detail);
-                }
-                if (menuItem.getItemId() == R.id.menu_search) {
-                    setContentView(R.layout.activity_locations);
-                }
-                if (menuItem.getItemId() == R.id.menu_settings) {
-                    setContentView(R.layout.activity_settings);
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_home:
+
+                        startActivity(new Intent(DetailActivity.this, MainActivity.class));
+                        return true;
+                    case R.id.menu_graphics:
+                        startActivity(new Intent(DetailActivity.this, DetailActivity.class));
+                        return true;
+                    case R.id.menu_search:
+                        startActivity(new Intent (DetailActivity.this, SearchActivity.class));
+                        return true;
+                    case R.id.menu_settings:
+                        startActivity(new Intent (DetailActivity.this, SettingsActivity.class));
+                        return true;
                 }
                 return false;
+
             }
-        });
+        }) ;
 
 
     }
