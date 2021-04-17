@@ -79,12 +79,13 @@
 
 // TableLAyout que gestiona lo que se muestra en  la tabla de datos.
     <TableLayout
+        android:id="@+id/tablaDatos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         android:layout_marginBottom="80dp"
         app:layout_constraintTop_toBottomOf="@+id/casosPorHabitantes"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginHorizontal="20dp"
         android:background="#807D7D">
 
@@ -243,6 +244,28 @@
 
 
     </TableLayout>
+
+    <EditText
+        android:id="@+id/nombreCiudadInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="City Name"
+        app:layout_constraintTop_toBottomOf="@+id/tablaDatos"/>
+
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Refrescar datasource"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/nombreCiudadInput"
+        android:onClick="refreshView"
+         ></Button>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
