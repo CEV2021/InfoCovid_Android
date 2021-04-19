@@ -201,7 +201,7 @@ public class Connection {
 
 
             } else {
-                csvHeaders = csvLine.split(",");
+                csvHeaders = csvLine.split(";");
                 flagHeader = false;
             }
         }

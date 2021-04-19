@@ -1,23 +1,7 @@
 package com.example.infocovid.datalayer;
 
-import android.app.Activity;
+
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.ProgressBar;
-
-import com.example.infocovid.datalayer.model.Comunidad;
-import com.example.infocovid.datalayer.model.Provincia;
-import com.example.infocovid.datalayer.model.Municipio;
-import com.example.infocovid.datalayer.model.Datos;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import com.example.infocovid.MainActivity;
 import com.example.infocovid.datalayer.connection.eldiario.Connection;
 
 public class DataManager extends AsyncTask<String, Void, String> {
