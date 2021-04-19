@@ -3,13 +3,14 @@ package com.example.infocovid;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SettingsActivity extends AppCompatActivity {
-    BottomNavigationView dBottomNavigation;
+    BottomNavigationView BottomNavigation;
 
 
     @Override
@@ -17,25 +18,29 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         // control de navegacion por iconos
-        dBottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-        dBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        BottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
+        BottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                if (menuItem.getItemId() == R.id.menu_home) {
-                    setContentView(R.layout.activity_main);
-                }
-                if (menuItem.getItemId() == R.id.menu_graphics) {
-                    setContentView(R.layout.activity_detail);
-                }
-                if (menuItem.getItemId() == R.id.menu_search) {
-                    setContentView(R.layout.activity_locations);
-                }
-                if (menuItem.getItemId() == R.id.menu_settings) {
-                    setContentView(R.layout.activity_settings);
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_home:
+                        startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                        return true;
+                    case R.id.menu_graphics:
+                        startActivity(new Intent(SettingsActivity.this, DetailActivity.class));
+                        return true;
+                    case R.id.menu_search:
+                        startActivity(new Intent (SettingsActivity.this, SearchActivity.class));
+                        return true;
+                    case R.id.menu_settings:
+                        startActivity(new Intent (SettingsActivity.this, SettingsActivity.class));
+                        return true;
+
                 }
                 return false;
+
             }
-        });
+        }) ;
     }
 }

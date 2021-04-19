@@ -4,4 +4,10 @@
     <string name="homeName">Home</string>
     <string name="searchName">Buscar Ubicacion</string>
     <string name="settingsName">Ajustes</string>
+    <string name="curados">Curados:</string>
+    <string name="nuevos_casos">Nuevos casos:</string>
+    <string name="fallecidos">Fallecidos</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

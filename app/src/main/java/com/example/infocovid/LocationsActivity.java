@@ -3,6 +3,7 @@ package com.example.infocovid;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -23,20 +24,24 @@ public class LocationsActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                if (menuItem.getItemId() == R.id.menu_home) {
-                    setContentView(R.layout.activity_main);
-                }
-                if (menuItem.getItemId() == R.id.menu_graphics) {
-                    setContentView(R.layout.activity_detail);
-                }
-                if (menuItem.getItemId() == R.id.menu_search) {
-                    setContentView(R.layout.activity_locations);
-                }
-                if (menuItem.getItemId() == R.id.menu_settings) {
-                    setContentView(R.layout.activity_settings);
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_home:
+                        startActivity(new Intent(LocationsActivity.this, MainActivity.class));
+                        return true;
+                    case R.id.menu_graphics:
+                        startActivity(new Intent(LocationsActivity.this, DetailActivity.class));
+                        return true;
+                    case R.id.menu_search:
+                        startActivity(new Intent (LocationsActivity.this, SearchActivity.class));
+                        return true;
+                    case R.id.menu_settings:
+                        startActivity(new Intent (LocationsActivity.this, SettingsActivity.class));
+                        return true;
+
                 }
                 return false;
+
             }
-        });
+        }) ;
     }
 }

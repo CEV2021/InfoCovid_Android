@@ -68,19 +68,23 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                if (menuItem.getItemId() == R.id.menu_home) {
-                    // aqui va la ruta que cambie de activity al seleccionar ese item.
-                }
-                if (menuItem.getItemId() == R.id.menu_graphics) {
-                    // aqui va la ruta que cambie de activity al seleccionar ese item.
-                }
-                if (menuItem.getItemId() == R.id.menu_search) {
-                    // aqui va la ruta que cambie de activity al seleccionar ese item.
-                }
-                if (menuItem.getItemId() == R.id.menu_settings) {
-                    // aqui va la ruta que cambie de activity al seleccionar ese item.                }
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_home:
+                        startActivity(new Intent (MainActivity.this, MainActivity.class));
+                    return true;
+                    case R.id.menu_graphics:
+                        startActivity(new Intent(MainActivity.this, DetailActivity.class));
+                        return true;
+                    case R.id.menu_search:
+                        startActivity(new Intent (MainActivity.this, SearchActivity.class));
+                        return true;
+                    case R.id.menu_settings:
+                        startActivity(new Intent (MainActivity.this, SettingsActivity.class));
+                        return true;
+
                 }
                 return false;
+
             }
         });
     }

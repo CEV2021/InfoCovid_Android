@@ -13,10 +13,11 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.InfoCovid">
-        <activity android:name="com.example.infocovid.SettingsActivity"></activity>
-        <activity android:name="com.example.infocovid.LocationsActivity" />
-        <activity android:name="com.example.infocovid.DetailActivity" />
-        <activity android:name="com.example.infocovid.MainActivity">
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".LocationsActivity" />
+        <activity android:name=".DetailActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

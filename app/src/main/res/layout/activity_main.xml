@@ -11,8 +11,9 @@
     // Barra de navegacion
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:labelVisibilityMode="labeled"
         android:background="#807D7D"
         app:itemTextColor="#ffffff"
         app:itemIconTint="@color/black"
