@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    // Barra de navegacion
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:labelVisibilityMode="labeled"
+
+        android:background="#807D7D"
+        app:itemTextColor="#ffffff"
+        app:itemIconTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <TextView
+        android:id="@+id/tituloSettings"
+        android:layout_width="126dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="AJUSTES"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/tituloSettings"
+        android:layout_marginTop="100dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/ajustesInfoCovid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INFO-COVID"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="30dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <Switch
+                android:id="@+id/switchUsarUbicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Usar ubicación actual"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <Switch
+                android:id="@+id/switchNotificaciones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notificaciones"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <Switch
+                android:id="@+id/switchActivarWidget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activar Widget del Covid"
+                />
+
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/FAQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FAQ"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="30dp"/>
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            >
+
+            <TextView
+                android:id="@+id/deDondeVienenLosDatos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿De dónde obtenemos los datos?"
+                android:textStyle="bold"
+                android:onClick="GoLinks"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/comoEvitarContagios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="GoLinks"
+                android:text="¿Cómo puedo evitar contagios?"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tenerVariasCuentas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Puedo tener varias cuentas?"
+                android:textStyle="bold"
+                android:onClick="GoLinks"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/cambioDeSmartphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Qué pasa si cambio de smartphone?"
+                android:textStyle="bold"
+                android:onClick="GoLinks"
+                />
+        </TableRow>
+
+
+
+    </TableLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
