@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
         setContentView(R.layout.activity_main);
 
         // elementos para test
-        cityInput = findViewById(R.id.nombreCiudadInput);
-        refreshButton = findViewById(R.id.refreshButton);
+       // cityInput = findViewById(R.id.nombreCiudadInput);
+        // refreshButton = findViewById(R.id.refreshButton);
 
         // datos a actualizar
         nombreCiudad = findViewById(R.id.ciudadNombre);
@@ -142,7 +142,8 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
     }
 
     // method required by the dataManager class
-    public void refreshView() {
+   public void refreshView() {
+        /*
         // a partir de una cadena de texto
         String currentCityName = cityInput.getText().toString();
         Boolean checkpoint = true;
@@ -156,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
             curados.setText(datos2Display.getRecuperados().toString());
             fallecidos.setText(datos2Display.getMuertos().toString());
         }
+
+         */
     }
 
     @Override
