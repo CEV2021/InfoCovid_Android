@@ -4,7 +4,7 @@ package com.example.infocovid.datalayer;
 import android.os.AsyncTask;
 import com.example.infocovid.datalayer.connection.eldiario.Connection;
 
-public class DataManager extends AsyncTask<String, Void, String> {
+/*public class DataManager extends AsyncTask<String, Void, String> {
 
     SupportsDataManager activityCallback;
 
@@ -46,3 +46,4 @@ public class DataManager extends AsyncTask<String, Void, String> {
     }
 
 }
+*/

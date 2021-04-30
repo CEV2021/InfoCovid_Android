@@ -3,14 +3,18 @@ package com.example.infocovid.datalayer.datamodels;
 import java.util.ArrayList;
 
 public class Region {
+
     private int id;
     private String name;
+    private ArrayList<Data> data;
 
-    public Region(int id, String name, ArrayList<Data> data) {
+    public Region(int id, String name, ArrayList<Data> data ) {
         this.id = id;
         this.name = name;
         this.data = data;
     }
+
+
 
     public int getId() {
         return id;
@@ -36,5 +40,5 @@ public class Region {
         this.data = data;
     }
 
-    private ArrayList<Data> data;
+
 }

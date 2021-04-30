@@ -6,14 +6,16 @@ public class Data {
     private int detahs;
     private int recovered;
     private int active;
+    private Double incidentRate;
+    private String date;
 
-    public Data(int id, int confirmed, int detahs, int recovered, int active, int indcidentRate, String date) {
+    public Data(int id, int confirmed, int detahs, int recovered, int active, Double incidentRate, String date) {
         this.id = id;
         this.confirmed = confirmed;
         this.detahs = detahs;
         this.recovered = recovered;
         this.active = active;
-        this.indcidentRate = indcidentRate;
+        this.incidentRate = incidentRate;
         this.date = date;
     }
 
@@ -57,12 +59,12 @@ public class Data {
         this.active = active;
     }
 
-    public int getIndcidentRate() {
-        return indcidentRate;
+    public Double getIncidentRate() {
+        return incidentRate;
     }
 
-    public void setIndcidentRate(int indcidentRate) {
-        this.indcidentRate = indcidentRate;
+    public void setIncidentRate(Double incidentRate) {
+        this.incidentRate = incidentRate;
     }
 
     public String getDate() {
@@ -73,6 +75,5 @@ public class Data {
         this.date = date;
     }
 
-    private int indcidentRate;
-    private String date;
+
 }
