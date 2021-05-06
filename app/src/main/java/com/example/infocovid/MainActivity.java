@@ -145,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
     public void refreshView() {
         // a partir de una cadena de texto
         String currentCityName = cityInput.getText().toString();
-        Boolean checkpoint = true;
 
         // podemos llamar al conector y buscar los datos
         Datos datos2Display = connection.getDatos(currentCityName);
