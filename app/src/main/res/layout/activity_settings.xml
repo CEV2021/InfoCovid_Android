@@ -126,20 +126,22 @@
                 android:layout_height="wrap_content"
                 android:text="¿De dónde obtenemos los datos?"
                 android:textStyle="bold"
+                android:onClick="GoLinks"
                 />
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
             <TextView
                 android:id="@+id/comoEvitarContagios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="GoLinks"
                 android:text="¿Cómo puedo evitar contagios?"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -152,6 +154,7 @@
                 android:layout_height="wrap_content"
                 android:text="¿Puedo tener varias cuentas?"
                 android:textStyle="bold"
+                android:onClick="GoLinks"
                 />
         </TableRow>
         <TableRow
@@ -165,6 +168,7 @@
                 android:layout_height="wrap_content"
                 android:text="¿Qué pasa si cambio de smartphone?"
                 android:textStyle="bold"
+                android:onClick="GoLinks"
                 />
         </TableRow>
 

@@ -2,7 +2,7 @@ package com.example.infocovid;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.infocovid.datalayer.DataManager;
+
 
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -12,21 +12,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infocovid.datalayer.connection.eldiario.Connection;
+import com.example.infocovid.datalayer.datamodels.ApiClient;
+import com.example.infocovid.datalayer.datamodels.PreferencesManager;
+import com.example.infocovid.datalayer.datamodels.Region;
+import com.example.infocovid.datalayer.datamodels.RegionList;
+import com.example.infocovid.datalayer.datamodels.RegionService;
 import com.example.infocovid.datalayer.model.Datos;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.infocovid.datalayer.SupportsDataManager;
+import java.util.ArrayList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements SupportsDataManager {
+
+public class MainActivity extends AppCompatActivity{
 
     BottomNavigationView nBottomNavigation;
-    DataManager dataManager;
-    Connection connection;
 
     TextView nombreCiudad;
     TextView incidenciaAcumulada;
@@ -35,18 +40,17 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
     TextView curados;
     TextView fallecidos;
 
-    // for testing purposes
-    Button refreshButton;
-    EditText cityInput;
+
+    //API
+    RegionList regionList;
+    RegionService regionService;
+    boolean check = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // elementos para test
-        cityInput = findViewById(R.id.nombreCiudadInput);
-        refreshButton = findViewById(R.id.refreshButton);
 
         // datos a actualizar
         nombreCiudad = findViewById(R.id.ciudadNombre);
@@ -56,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
         curados = findViewById(R.id.curadosTableNumero);
         fallecidos = findViewById(R.id.fallecidosTableNumero);
 
-        // Initializing dataManager
-        dataManager = new DataManager(this);
-        // Refreshing apps data
+
         this.refreshData();
 
         //Creamos el menu de navegacion y el metodo de navegacion por pulsacion.
@@ -88,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
 
             }
         });
+
+
     }
 
 
@@ -120,48 +124,105 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
             }
         }
 
+
         return validConnection;
     }
 
-    // Method to refresh the bands list
-    public void refreshData(View view) {
-        this.refreshData();
-    }
-    // Method to refresh the bands list
+
     public void refreshData() {
         if (isConnected()) {
-            dataManager.execute();
+            isVisible(check);
+            regionService = ApiClient.getClient().create(RegionService.class);
+            getData(); //Peticion
         } else {
             // If there is no connection:
             Toast.makeText(this,"No connection", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Method to refresh the bands list
-    public void refreshView(View view) {
-        this.refreshView();
+    public  void getData() {
+        Call<ArrayList<Region>> call = regionService.getRegions();
+
+        call.enqueue(new Callback<ArrayList<Region>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Region>> call, Response<ArrayList<Region>> response) {
+                Log.e("onResponse", "Response -->" + response.body().size());
+
+                regionList = new RegionList();
+
+                for (int i = 0; i < response.body().size(); i ++) {
+                  regionList.regions.add(i, response.body().get(i));
+                }
+
+               PreferencesManager.saveInPreferences(getApplicationContext(), regionList.regions);
+                check = true;
+                isVisible(check);
+
+                RegionList list = new RegionList();
+                list.regions = PreferencesManager.loadPreferences(getApplicationContext());
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Region>> call, Throwable t) {
+                Log.e("onFailure", "Error " + t.getLocalizedMessage());
+                check = false;
+                isVisible(check);
+            }
+        });
+
     }
 
-    // method required by the dataManager class
-    public void refreshView() {
-        // a partir de una cadena de texto
-        String currentCityName = cityInput.getText().toString();
 
-        // podemos llamar al conector y buscar los datos
-        Datos datos2Display = connection.getDatos(currentCityName);
-        if (datos2Display != null) {
-            nombreCiudad.setText(datos2Display.getMunicipio().getNombre());
-            incidenciaAcumulada.setText(datos2Display.getIa14Dias().toString());
-            casosTotales.setText(datos2Display.getTasa().toString());
-            curados.setText(datos2Display.getRecuperados().toString());
-            fallecidos.setText(datos2Display.getMuertos().toString());
+//    // Method to refresh the bands list
+//    public void refreshView(View view) {
+//        this.refreshView();
+//    }
+//
+//    // method required by the dataManager class
+//    public void refreshView() {
+//        // a partir de una cadena de texto
+//        String currentCityName = cityInput.getText().toString();
+//
+//        // podemos llamar al conector y buscar los datos
+//        Datos datos2Display = connection.getDatos(currentCityName);
+//        if (datos2Display != null) {
+//            nombreCiudad.setText(datos2Display.getMunicipio().getNombre());
+//            incidenciaAcumulada.setText(datos2Display.getIa14Dias().toString());
+//            casosTotales.setText(datos2Display.getTasa().toString());
+//            curados.setText(datos2Display.getRecuperados().toString());
+//            fallecidos.setText(datos2Display.getMuertos().toString());
+//        } else {
+//            Log.w("debug_mess", "no carga la ciudad");
+//        }
+//    }
+//
+//    @Override
+//    public void setConnection(Connection connection) {
+//        this.connection = connection;
+//    }
+
+    // Setting up visibility
+
+    public void isVisible(boolean check) {
+
+        if (!check) { //Ocultamos vistas
+            nombreCiudad.setVisibility(View.INVISIBLE);
+            incidenciaAcumulada.setVisibility(View.INVISIBLE);
+            casosTotales.setVisibility(View.INVISIBLE);
+            nuevosCasos.setVisibility(View.INVISIBLE);
+            curados.setVisibility(View.INVISIBLE);
+            fallecidos.setVisibility(View.INVISIBLE);
         } else {
-            Log.w("debug_mess", "no carga la ciudad");
+            nombreCiudad.setVisibility(View.VISIBLE);
+            incidenciaAcumulada.setVisibility(View.VISIBLE);
+            casosTotales.setVisibility(View.VISIBLE);
+            nuevosCasos.setVisibility(View.VISIBLE);
+            curados.setVisibility(View.VISIBLE);
+            fallecidos.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
+
 }
