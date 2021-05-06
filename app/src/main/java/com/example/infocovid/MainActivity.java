@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -154,12 +155,13 @@ public class MainActivity extends AppCompatActivity implements SupportsDataManag
             casosTotales.setText(datos2Display.getTasa().toString());
             curados.setText(datos2Display.getRecuperados().toString());
             fallecidos.setText(datos2Display.getMuertos().toString());
+        } else {
+            Log.w("debug_mess", "no carga la ciudad");
         }
     }
 
     @Override
     public void setConnection(Connection connection) {
-        Boolean debugCheckPoint;
         this.connection = connection;
     }
 }

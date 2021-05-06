@@ -179,11 +179,11 @@ public class Connection {
                     this.comunidades.add(currentComunidad);
                 }
 
-                if (currentMunicipio.getNombre().equals("Voto") && currentComunidad.getNombre().equals("Cantabria")) {
-                    String another = "moline";
-                    Integer mynumber = 99;
-                    Log.w("Logger", "WTF is going on");
-                }
+//                if (currentMunicipio.getNombre().equals("Voto") && currentComunidad.getNombre().equals("Cantabria")) {
+//                    String another = "moline";
+//                    Integer mynumber = 99;
+//                    Log.w("Logger", "WTF is going on");
+//                }
 
                 // Now we link the data on all the containers
                 currentMunicipio.setComunidad(currentComunidad);
