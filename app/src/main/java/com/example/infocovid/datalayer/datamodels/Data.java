@@ -3,7 +3,7 @@ package com.example.infocovid.datalayer.datamodels;
 public class Data {
     private int id;
     private int confirmed;
-    private int detahs;
+    private int deaths;
     private int recovered;
     private int active;
     private Double incidentRate;
@@ -12,7 +12,7 @@ public class Data {
     public Data(int id, int confirmed, int detahs, int recovered, int active, Double incidentRate, String date) {
         this.id = id;
         this.confirmed = confirmed;
-        this.detahs = detahs;
+        this.deaths = detahs;
         this.recovered = recovered;
         this.active = active;
         this.incidentRate = incidentRate;
@@ -35,12 +35,12 @@ public class Data {
         this.confirmed = confirmed;
     }
 
-    public int getDetahs() {
-        return detahs;
+    public int getDeaths() {
+        return deaths;
     }
 
-    public void setDetahs(int detahs) {
-        this.detahs = detahs;
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
     }
 
     public int getRecovered() {

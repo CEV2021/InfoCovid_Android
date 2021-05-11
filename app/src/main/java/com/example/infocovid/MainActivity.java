@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
 
-        // datos a actualizar
+        // TextViews
         nombreCiudad = findViewById(R.id.ciudadNombre);
         incidenciaAcumulada = findViewById(R.id.incidenciaAcumuladaNumero);
         casosTotales = findViewById(R.id.casosTotalesTableNumero);
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity{
 
         this.refreshData();
 
-        //Creamos el menu de navegacion y el metodo de navegacion por pulsacion.
+        // NavigationMenu
         nBottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity{
         return validConnection;
     }
 
-
+    //Method to refreshDat, views and get the Data From API
     public void refreshData() {
         if (isConnected()) {
             isVisible(check);
@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    // Getting data from API and save in Preferences
     public  void getData() {
         Call<ArrayList<Region>> call = regionService.getRegions();
 
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity{
                 RegionList list = new RegionList();
                 list.regions = PreferencesManager.loadPreferences(getApplicationContext());
 
+                setUpViews(list);
 
             }
 
@@ -172,7 +174,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     // Setting up visibility
-
     public void isVisible(boolean check) {
 
         if (!check) { //Ocultamos vistas
@@ -189,6 +190,27 @@ public class MainActivity extends AppCompatActivity{
             nuevosCasos.setVisibility(View.VISIBLE);
             curados.setVisibility(View.VISIBLE);
             fallecidos.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setUpViews(RegionList list) {
+
+        // To update views
+        String totalCases;
+        String newCases;
+        String healths;
+        String deaths;
+        String incidentRate;
+
+        if (regionList.regions != null) { // Update views
+            nombreCiudad.setText(list.regions.get(1).getName());
+            incidenciaAcumulada.setText(incidentRate = String.valueOf(list.regions.get(1).getData().get(1).getIncidentRate()));
+            casosTotales.setText(totalCases = String.valueOf(list.regions.get(1).getData().get(1).getConfirmed()) );
+            nuevosCasos.setText( newCases = String.valueOf( list.regions.get(1).getData().get(1).getActive()));
+            curados.setText( healths = String.valueOf(list.regions.get(1).getData().get(1).getRecovered()));
+            fallecidos.setText(deaths = String.valueOf(list.regions.get(1).getData().get(1).getDeaths()));
+        } else {
+            refreshData();
         }
     }
 
