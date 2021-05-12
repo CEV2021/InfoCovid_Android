@@ -2,6 +2,7 @@ package com.example.infocovid;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 
 import android.content.Intent;
@@ -10,10 +11,12 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.infocovid.datalayer.datamodels.ApiClient;
 import com.example.infocovid.datalayer.datamodels.PreferencesManager;
 import com.example.infocovid.datalayer.datamodels.Region;
@@ -29,6 +32,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity{
 
     BottomNavigationView nBottomNavigation;
+    Toolbar myToolbar;
 
     TextView nombreCiudad;
     TextView incidenciaAcumulada;
@@ -87,10 +91,29 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
-
-
+        myToolbar = findViewById(R.id.myToolbar);
+        setSupportActionBar(myToolbar);
+    }
+    /// App Bar -- Toolbar -- Menu Items
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+       getMenuInflater().inflate(R.menu.toolbar_menu_items, menu);
+       return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.addItem) {
+
+
+        } else if(id == R.id.seeList) {
+
+        }
+
+        return true;
+    }
 
     // Method to check if the mobile phone is connected before starting the request
     private boolean isConnected() {
