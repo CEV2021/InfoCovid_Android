@@ -61,8 +61,9 @@ public class MainActivity extends AppCompatActivity{
         curados = findViewById(R.id.curadosTableNumero);
         fallecidos = findViewById(R.id.fallecidosTableNumero);
 
+        loadData();
+        loadSelectedCity();
 
-        this.refreshData();
 
         // NavigationMenu
         nBottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity{
                 RegionList list = new RegionList();
                 list.regions = PreferencesManager.loadPreferences(getApplicationContext());
 
-                setUpViews(list);
+                setUpViews(list, 1);
 
             }
 
@@ -195,7 +196,35 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+    //Getting data from preferences if we have it
+    public void loadData() {
+        regionList = new RegionList();
 
+        regionList.regions = PreferencesManager.loadPreferences(this);
+
+        if (regionList.regions.isEmpty()) {
+            this.refreshData();
+        } else {
+            check = true;
+            isVisible(check);
+            setUpViews(regionList, 1);
+        }
+    }
+    // We try to load our city from SearchActiviyty it that exist if not try to LoadData form preferences
+    public void loadSelectedCity() {
+        String city = getIntent().getStringExtra("onItemSelected");
+
+        if (city == null) {
+            loadData();
+        } else {
+            Integer index = Integer.parseInt(city);
+            Log.e("INTENT", "RESPUESTA ----> " + city);
+            Log.e("index " + city, "En region es " + regionList.regions.get(index).getName());
+
+            setUpViews(regionList, index);
+        }
+
+    }
     // Setting up visibility
     public void isVisible(boolean check) {
 
@@ -216,7 +245,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    public void setUpViews(RegionList list) {
+    public void setUpViews(RegionList list, int index) {
 
         // To update views
         String totalCases;
@@ -226,12 +255,12 @@ public class MainActivity extends AppCompatActivity{
         String incidentRate;
 
         if (regionList.regions != null) { // Update views
-            nombreCiudad.setText(list.regions.get(1).getName());
-            incidenciaAcumulada.setText(incidentRate = String.valueOf(list.regions.get(1).getData().get(1).getIncidentRate()));
-            casosTotales.setText(totalCases = String.valueOf(list.regions.get(1).getData().get(1).getConfirmed()) );
-            nuevosCasos.setText( newCases = String.valueOf( list.regions.get(1).getData().get(1).getActive()));
-            curados.setText( healths = String.valueOf(list.regions.get(1).getData().get(1).getRecovered()));
-            fallecidos.setText(deaths = String.valueOf(list.regions.get(1).getData().get(1).getDeaths()));
+            nombreCiudad.setText(list.regions.get(index).getName());
+            incidenciaAcumulada.setText(incidentRate = String.valueOf(list.regions.get(index).getData().get(index).getIncidentRate()));
+            casosTotales.setText(totalCases = String.valueOf(list.regions.get(index).getData().get(index).getConfirmed()) );
+            nuevosCasos.setText( newCases = String.valueOf( list.regions.get(index).getData().get(index).getActive()));
+            curados.setText( healths = String.valueOf(list.regions.get(index).getData().get(index).getRecovered()));
+            fallecidos.setText(deaths = String.valueOf(list.regions.get(index).getData().get(index).getDeaths()));
         } else {
             refreshData();
         }

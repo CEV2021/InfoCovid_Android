@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.infocovid.datalayer.datamodels.PreferencesManager;
 import com.example.infocovid.datalayer.datamodels.RegionList;
@@ -31,24 +33,17 @@ public class SearchActivity extends AppCompatActivity {
     String incidentRate;
     int ciudadElegida;
 
-    TextView ciudadNombre, incidenciaAcumuladaNumero, casosTotalesTableNumero, nuevosCasosTableNumero, curadosTableNumero, fallecidosTableNumero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        comunidades = new ArrayList<>();
+
         textView1 = findViewById(R.id.searchComunity);
-        ciudadNombre = findViewById(R.id.ciudadNombre);
-        incidenciaAcumuladaNumero = findViewById(R.id.incidenciaAcumuladaNumero);
-        casosTotalesTableNumero = findViewById(R.id.casosTotalesTableNumero);
-        nuevosCasosTableNumero = findViewById(R.id.nuevosCasosTableNumero);
-        curadosTableNumero = findViewById(R.id.curadosTableNumero);
-        fallecidosTableNumero = findViewById(R.id.fallecidosTableNumero);
 
 
-
+        comunidades = new ArrayList<>();
 
         // control de navegacion por iconos
         BottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
@@ -85,13 +80,25 @@ public class SearchActivity extends AppCompatActivity {
 
             for(int i= 0; i < list.regions.size(); i++){
                 comunidades.add(list.regions.get(i).getName());
-                Log.e("cas", list.regions.get(i).getName());
             }
 
 
             //Cargamos array Adaptativo con las comunidades almacenadas de la carga
             ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, comunidades);
             textView1.setAdapter(adapter1);
+            textView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Log.e("Search Activity","" + adapter1.getItem(position));
+
+                    Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                    String item;
+                    String onItemSelected = item = String.valueOf(comunidades.indexOf(adapter1.getItem(position)));
+                    intent.putExtra("onItemSelected", onItemSelected);
+
+                    startActivity(intent);
+                }
+            });
         }else{
         }
 
@@ -99,51 +106,4 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
-    public RegionList ChargeData(){
-
-        RegionList list = new RegionList();
-
-        try{
-            list.regions = PreferencesManager.loadPreferences(this);
-
-
-            if(list.isEmpty()){
-                return new RegionList();
-            }else{
-                return list;
-            }
-        }catch (Exception e){
-
-            return new RegionList();
-        }
-    }
-
-    public void SelectComunity(View v){
-
-        if(!textView1.getText().toString().isEmpty()){
-
-            for(int i=0 ; i < list.regions.size(); i++){
-                if (textView1.getText().toString().equals(list.regions.get(i).getName())){
-                    ciudadElegida = i;
-                    i = list.regions.size() -1;
-                }
-            }
-        }
-
-        setUpViews();
-    }
-
-    public void setUpViews() {
-
-        if (list.regions != null) { // Update views
-            ciudadNombre.setText(list.regions.get(ciudadElegida).getName());
-            incidenciaAcumuladaNumero.setText(incidentRate = String.valueOf(list.regions.get(ciudadElegida).getData().get(1).getIncidentRate()));
-            casosTotalesTableNumero.setText(totalCases = String.valueOf(list.regions.get(ciudadElegida).getData().get(1).getConfirmed()) );
-            nuevosCasosTableNumero.setText( newCases = String.valueOf( list.regions.get(ciudadElegida).getData().get(1).getActive()));
-            curadosTableNumero.setText( healths = String.valueOf(list.regions.get(ciudadElegida).getData().get(1).getRecovered()));
-            fallecidosTableNumero.setText(deaths = String.valueOf(list.regions.get(ciudadElegida).getData().get(1).getDeaths()));
-        } else {
-            //No hay Datos
-        }
-    }
 }
