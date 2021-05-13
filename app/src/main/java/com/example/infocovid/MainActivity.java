@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
     TextView nuevosCasos;
     TextView curados;
     TextView fallecidos;
-
+    ListView favoriteList;
 
     //API
     RegionList regionList;
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity{
         nuevosCasos = findViewById(R.id.nuevosCasosTableNumero);
         curados = findViewById(R.id.curadosTableNumero);
         fallecidos = findViewById(R.id.fallecidosTableNumero);
+
+        //listView
+        favoriteList = findViewById(R.id.favoriteList);
 
         loadData();
         loadSelectedCity();
@@ -110,7 +114,8 @@ public class MainActivity extends AppCompatActivity{
 
 
         } else if(id == R.id.seeList) {
-
+            Intent intent = new Intent(MainActivity.this, FavoriteListActivity.class);
+            startActivity(intent);
         }
 
         return true;
@@ -202,7 +207,7 @@ public class MainActivity extends AppCompatActivity{
 
         regionList.regions = PreferencesManager.loadPreferences(this);
 
-        if (regionList.regions.isEmpty()) {
+        if (regionList.regions == null) {
             this.refreshData();
         } else {
             check = true;
