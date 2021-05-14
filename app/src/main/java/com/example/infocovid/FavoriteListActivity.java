@@ -2,6 +2,8 @@ package com.example.infocovid;
 
 import android.os.Bundle;
 
+import com.example.infocovid.datalayer.datamodels.CityListAdapter;
+import com.example.infocovid.datalayer.datamodels.FavoriteListAdapter;
 import com.example.infocovid.datalayer.datamodels.PreferencesManager;
 import com.example.infocovid.datalayer.datamodels.Region;
 import com.example.infocovid.datalayer.datamodels.RegionList;
@@ -10,6 +12,7 @@ import com.example.infocovid.datalayer.datamodels.RegionList;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.util.Log;
 import android.widget.ListView;
 
 
@@ -17,7 +20,8 @@ import java.util.ArrayList;
 
 public class FavoriteListActivity extends AppCompatActivity {
 
-    ListView listView;
+    ListView comunitylistView;
+    ListView favoriteList;
     ArrayList<Region> regionList;
 
     @Override
@@ -25,20 +29,22 @@ public class FavoriteListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.favorite_list_layout);
 
-        listView = findViewById(R.id.favoriteList);
+        comunitylistView = (ListView) findViewById(R.id.comunityList);
+        favoriteList = (ListView) findViewById(R.id.favoriteList);
 
-        regionList = new ArrayList<>();
+       regionList =  loadAllRegions(regionList);
 
-        regionList = PreferencesManager.loadPreferences(this);
+        FavoriteListAdapter favoriteListAdapter = new FavoriteListAdapter(regionList, getApplicationContext());
+        favoriteList.setAdapter(favoriteListAdapter);
+        CityListAdapter cityListAdapter = new CityListAdapter(regionList, getApplicationContext());
+        comunitylistView.setAdapter(cityListAdapter);
 
-
-        CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.row, regionList);
-        listView.setAdapter(customListAdapter);
+        Log.e("Favorite List", " " + regionList.size());
 
 
     }
 
-    public void load (ArrayList<Region> regionList) {
+    public ArrayList<Region> loadAllRegions (ArrayList<Region> regionList) {
 
         regionList = new ArrayList<>();
 
@@ -47,5 +53,7 @@ public class FavoriteListActivity extends AppCompatActivity {
         if (regionList == null) {
             regionList = new RegionList();
         }
+
+        return regionList;
     }
 }
