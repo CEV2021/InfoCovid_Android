@@ -1,4 +1,4 @@
-package com.example.infocovid.datalayer.datamodels;
+package com.example.infocovid.datalayer.model;
 
 public class Data {
     private int id;

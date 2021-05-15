@@ -1,19 +1,35 @@
 package com.example.infocovid.ui.details;
 
-import androidx.lifecycle.LiveData;
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class DetailsViewModel extends ViewModel {
+import com.example.infocovid.datalayer.model.PreferencesManager;
+import com.example.infocovid.datalayer.model.Region;
 
-    private MutableLiveData<String> mText;
+import org.jetbrains.annotations.NotNull;
 
-    public DetailsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+import java.util.ArrayList;
+
+public class DetailsViewModel extends AndroidViewModel {
+
+    private MutableLiveData<ArrayList<Region>> currentData;
+
+
+    public DetailsViewModel(@NonNull @NotNull Application application) {
+        super(application);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public MutableLiveData<ArrayList<Region>> getData() {
+
+        currentData = new MutableLiveData<ArrayList<Region>>();
+
+        ArrayList<Region> regionList = new ArrayList<Region>();
+        regionList = PreferencesManager.getRegions(getApplication());
+        currentData.setValue(regionList);
+
+        return currentData;
     }
 }

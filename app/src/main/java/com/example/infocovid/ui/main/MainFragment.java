@@ -13,9 +13,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.infocovid.R;
-import com.example.infocovid.datalayer.datamodels.Data;
 import com.example.infocovid.datalayer.datamodels.RegionList;
-import com.example.infocovid.ui.dashboard.DashboardViewModel;
+import com.example.infocovid.datalayer.model.Region;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +34,10 @@ public class MainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    // Stuff for testing
+    Integer region2Load = 3;
+
+    // TextViews
     TextView nombreCiudad;
     TextView incidenciaAcumulada;
     TextView casosTotales;
@@ -48,9 +53,7 @@ public class MainFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-//        final TextView textView = root.findViewById(R.id.text_dashboard);
-
-        // datos a actualizar
+        // TextViews
         nombreCiudad = root.findViewById(R.id.ciudadNombre);
         incidenciaAcumulada = root.findViewById(R.id.incidenciaAcumuladaNumero);
         casosTotales = root.findViewById(R.id.casosTotalesTableNumero);
@@ -58,11 +61,18 @@ public class MainFragment extends Fragment {
         curados = root.findViewById(R.id.curadosTableNumero);
         fallecidos = root.findViewById(R.id.fallecidosTableNumero);
 
-        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<RegionList>() {
+        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Region>>() {
             @Override
-            public void onChanged(@Nullable RegionList list) {
-                
-//                textView.setText("");
+            public void onChanged(@Nullable ArrayList<Region> regionList) {
+
+                if (regionList != null && regionList.size() > 0) {
+                    nombreCiudad.setText(regionList.get(region2Load).getName());
+                    incidenciaAcumulada.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getIncidentRate()));
+                    casosTotales.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getConfirmed()));
+                    nuevosCasos.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getActive()));
+                    curados.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getRecovered()));
+                    fallecidos.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getDeaths()));
+                }
             }
         });
 

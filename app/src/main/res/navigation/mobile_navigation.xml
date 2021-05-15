@@ -18,10 +18,10 @@
         tools:layout="@layout/fragment_details" />
 
     <fragment
-        android:id="@+id/navigation_locations"
-        android:name="com.example.infocovid.ui.locations.LocationsFragment"
-        android:label="@string/title_locations"
-        tools:layout="@layout/fragment_locations" />
+        android:id="@+id/navigation_search"
+        android:name="com.example.infocovid.ui.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/navigation_settings"

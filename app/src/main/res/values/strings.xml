@@ -16,6 +16,7 @@
     <string name="title_main">Main</string>
     <string name="title_details">Details</string>
     <string name="title_locations">Locations</string>
+    <string name="title_search">Search Locations</string>
     <string name="title_settings">Settings</string>
 
 </resources>

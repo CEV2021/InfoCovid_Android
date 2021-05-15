@@ -9,30 +9,6 @@
     tools:context=".ui.details.DetailsFragment">
 
 
-    // Barra de navegacion
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:labelVisibilityMode="labeled"
-        android:background="#807D7D"
-        app:itemTextColor="#ffffff"
-        app:itemIconTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TableLayout
         android:id="@+id/tableDetailHoy"
         android:layout_width="match_parent"
@@ -166,7 +142,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintTop_toBottomOf="@+id/tableDetailHoy"
         android:background="#807D7D"
         >

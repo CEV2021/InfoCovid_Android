@@ -1,5 +1,6 @@
 package com.example.infocovid.ui.details;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.infocovid.R;
-import com.example.infocovid.ui.dashboard.DashboardViewModel;
+import com.example.infocovid.datalayer.datamodels.RegionList;
+import com.example.infocovid.datalayer.model.Region;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,17 +41,52 @@ public class DetailsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    // Views
+    LineChart lineChart;
+    TextView nuevosCasosTableDetailNumeroHoy;
+    TextView curadosTableNumeroDetailHoy;
+    TextView fallecidosTableNumeroDetailHoy;
+    TextView nuevosCasosTableNumeroAntes;
+    TextView curadosTableNumeroAntes;
+    TextView fallecidosTableNumeroAntes;
+
+    //String to set the texts
+    String newCasesToday;
+    String recoveredToday;
+    String deathsToday;
+    String newCasesLast;
+    String recoveredLast;
+    String deathsLast;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         detailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_details, container, false);
 
-        final TextView textView = root.findViewById(R.id.text_dashboard);
+        nuevosCasosTableDetailNumeroHoy = root.findViewById(R.id.nuevosCasosTableDetailNumero);
+        curadosTableNumeroDetailHoy = root.findViewById(R.id.curadosTableNumeroDetailHoy);
+        fallecidosTableNumeroDetailHoy = root.findViewById(R.id.fallecidosTableNumeroDetailHoy);
+        nuevosCasosTableNumeroAntes = root.findViewById(R.id.nuevosCasosTableNumero);
+        curadosTableNumeroAntes = root.findViewById(R.id.curadosTableNumero);
+        fallecidosTableNumeroAntes = root.findViewById(R.id.fallecidosTableNumero);
 
-        detailsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        detailsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Region>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onChanged(@Nullable ArrayList<Region> regionList) {
+                if (regionList != null && regionList.size() > 0) {
+                    //Obtenemos el ultimo
+                    nuevosCasosTableDetailNumeroHoy.setText(newCasesToday = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 1).getActive()));
+                    curadosTableNumeroDetailHoy.setText(recoveredToday = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 1).getRecovered()));
+                    fallecidosTableNumeroDetailHoy.setText(deathsToday = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 1).getDeaths()));
+
+                    //Obtenemos el penultimo
+                    nuevosCasosTableNumeroAntes.setText(newCasesLast = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 2).getActive()));
+                    curadosTableNumeroAntes.setText(recoveredLast = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 2).getRecovered()));
+                    fallecidosTableNumeroAntes.setText(deathsLast = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 2).getDeaths()));
+
+                    // Pintamos la grafica
+//                    drawChart(root, regionList);
+                }
             }
         });
         return root;
@@ -77,5 +121,57 @@ public class DetailsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    /*
+     * QUEDA PENDIENTE DE HABLAR CON EL TEAM DE IOS QUE DATOS PINTAMOS PARA QUE SEAN LOS MISMOS, DEJO EL EJEMPLO DE COMO SE PINTAN
+     * SEGURAMENTE PINTAREMOS LOS ÚLTIMOS 7 DÍAS
+     * */
+    public void drawChart(View root, RegionList regionList) {
+
+
+        lineChart = root.findViewById(R.id.lineChart);
+
+        //Metemos datos
+        ArrayList<Entry> deadValues = new ArrayList<>();
+        ArrayList<Entry> recovered = new ArrayList<>();
+        ArrayList<Entry> cases = new ArrayList<>();
+        ArrayList<Entry> activeCases = new ArrayList<>();
+
+        for (int i = 0; i < regionList.regions.get(0).getData().size()  ; i ++) { //LLenamos array
+            deadValues.add(new Entry(i,regionList.regions.get(0).getData().get(i).getDeaths()));
+            recovered.add(new Entry(i,regionList.regions.get(0).getData().get(i).getRecovered()));
+            cases.add(new Entry(i,regionList.regions.get(0).getData().get(i).getConfirmed()));
+            activeCases.add(new Entry(i,regionList.regions.get(0).getData().get(i).getActive()));
+        }
+
+        LineDataSet set1 = new LineDataSet(deadValues, regionList.regions.get(0).getName() + " deaths");
+        LineDataSet set2 = new LineDataSet(recovered, regionList.regions.get(0).getName() + " recovered");
+        LineDataSet set3 = new LineDataSet(cases, regionList.regions.get(0).getName() + " confirmed");
+        LineDataSet set4 = new LineDataSet(activeCases, regionList.regions.get(0).getName() + " active");
+
+        set1.setFillAlpha(110);
+        set1.setColor(Color.RED);
+        set1.setLineWidth(3f);
+        set2.setFillAlpha(110);
+        set2.setColor(Color.GREEN);
+        set2.setLineWidth(3f);
+        set3.setFillAlpha(110);
+        set3.setColor(Color.BLUE);
+        set3.setLineWidth(3f);
+        set4.setFillAlpha(110);
+        set4.setColor(Color.MAGENTA);
+        set4.setLineWidth(3f);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+        dataSets.add(set2);
+        //dataSets.add(set3);
+        //dataSets.add(set4);
+
+        LineData data = new LineData(dataSets);
+
+        lineChart.setData(data);
+
     }
 }

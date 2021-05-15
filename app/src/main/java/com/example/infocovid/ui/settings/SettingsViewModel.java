@@ -1,19 +1,37 @@
 package com.example.infocovid.ui.settings;
 
-import androidx.lifecycle.LiveData;
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import com.example.infocovid.datalayer.model.PreferencesManager;
+import com.example.infocovid.datalayer.datamodels.RegionList;
+import com.example.infocovid.datalayer.model.MySettings;
 
-public class SettingsViewModel extends ViewModel {
+import org.jetbrains.annotations.NotNull;
+public class SettingsViewModel extends AndroidViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<MySettings> currentData;
 
-    public SettingsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+    public SettingsViewModel(@NonNull @NotNull Application application) {
+        super(application);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public MutableLiveData<MySettings> getData() {
+
+        currentData = new MutableLiveData<MySettings>();
+
+        MySettings mySettings = new MySettings();
+        mySettings = PreferencesManager.getMySettings(getApplication());
+        currentData.setValue(mySettings);
+
+        return currentData;
+    }
+
+    public void setData(MySettings newSettings) {
+
+        PreferencesManager.setMySettings(getApplication(), newSettings);
+
     }
 }

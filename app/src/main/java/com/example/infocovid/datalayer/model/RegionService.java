@@ -1,4 +1,6 @@
-package com.example.infocovid.datalayer.datamodels;
+package com.example.infocovid.datalayer.model;
+
+import com.example.infocovid.datalayer.model.Region;
 
 import java.util.ArrayList;
 
