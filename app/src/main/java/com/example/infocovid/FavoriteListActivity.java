@@ -56,4 +56,6 @@ public class FavoriteListActivity extends AppCompatActivity {
 
         return regionList;
     }
+
+
 }
