@@ -14,8 +14,6 @@ public class Region {
         this.data = data;
     }
 
-
-
     public int getId() {
         return id;
     }

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,18 +28,23 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.os.Bundle;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
+    // Global variables to use the data throughout the app
+    Datos currentData;
+
+
+    // old code -- to adapt
     BottomNavigationView nBottomNavigation;
-
-    TextView nombreCiudad;
-    TextView incidenciaAcumulada;
-    TextView casosTotales;
-    TextView nuevosCasos;
-    TextView curados;
-    TextView fallecidos;
 
 
     //API
@@ -52,44 +58,17 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
 
-        // datos a actualizar
-        nombreCiudad = findViewById(R.id.ciudadNombre);
-        incidenciaAcumulada = findViewById(R.id.incidenciaAcumuladaNumero);
-        casosTotales = findViewById(R.id.casosTotalesTableNumero);
-        nuevosCasos = findViewById(R.id.nuevosCasosTableNumero);
-        curados = findViewById(R.id.curadosTableNumero);
-        fallecidos = findViewById(R.id.fallecidosTableNumero);
-
-
         this.refreshData();
 
-        //Creamos el menu de navegacion y el metodo de navegacion por pulsacion.
-        nBottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-
-
-        nBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                switch (menuItem.getItemId()) {
-                    case R.id.menu_home:
-                        startActivity(new Intent (MainActivity.this, MainActivity.class));
-                    return true;
-                    case R.id.menu_graphics:
-                        startActivity(new Intent(MainActivity.this, DetailActivity.class));
-                        return true;
-                    case R.id.menu_search:
-                        startActivity(new Intent (MainActivity.this, SearchActivity.class));
-                        return true;
-                    case R.id.menu_settings:
-                        startActivity(new Intent (MainActivity.this, SettingsActivity.class));
-                        return true;
-
-                }
-                return false;
-
-            }
-        });
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_main, R.id.navigation_details, R.id.navigation_locations, R.id.navigation_settings)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
 
 
     }
@@ -124,16 +103,15 @@ public class MainActivity extends AppCompatActivity{
             }
         }
 
-
         return validConnection;
     }
 
 
     public void refreshData() {
         if (isConnected()) {
-            isVisible(check);
+//            isVisible(check);
             regionService = ApiClient.getClient().create(RegionService.class);
-            getData(); //Peticion
+            this.getData(); //Peticion
         } else {
             // If there is no connection:
             Toast.makeText(this,"No connection", Toast.LENGTH_SHORT).show();
@@ -156,7 +134,7 @@ public class MainActivity extends AppCompatActivity{
 
                PreferencesManager.saveInPreferences(getApplicationContext(), regionList.regions);
                 check = true;
-                isVisible(check);
+//                isVisible(check);
 
                 RegionList list = new RegionList();
                 list.regions = PreferencesManager.loadPreferences(getApplicationContext());
@@ -168,7 +146,7 @@ public class MainActivity extends AppCompatActivity{
             public void onFailure(Call<ArrayList<Region>> call, Throwable t) {
                 Log.e("onFailure", "Error " + t.getLocalizedMessage());
                 check = false;
-                isVisible(check);
+//                isVisible(check);
             }
         });
 
@@ -205,24 +183,41 @@ public class MainActivity extends AppCompatActivity{
 
     // Setting up visibility
 
-    public void isVisible(boolean check) {
+//    public void isVisible(boolean check) {
+//
+//        if (!check) { //Ocultamos vistas
+//            nombreCiudad.setVisibility(View.INVISIBLE);
+//            incidenciaAcumulada.setVisibility(View.INVISIBLE);
+//            casosTotales.setVisibility(View.INVISIBLE);
+//            nuevosCasos.setVisibility(View.INVISIBLE);
+//            curados.setVisibility(View.INVISIBLE);
+//            fallecidos.setVisibility(View.INVISIBLE);
+//        } else {
+//            nombreCiudad.setVisibility(View.VISIBLE);
+//            incidenciaAcumulada.setVisibility(View.VISIBLE);
+//            casosTotales.setVisibility(View.VISIBLE);
+//            nuevosCasos.setVisibility(View.VISIBLE);
+//            curados.setVisibility(View.VISIBLE);
+//            fallecidos.setVisibility(View.VISIBLE);
+//        }
+//    }
 
-        if (!check) { //Ocultamos vistas
-            nombreCiudad.setVisibility(View.INVISIBLE);
-            incidenciaAcumulada.setVisibility(View.INVISIBLE);
-            casosTotales.setVisibility(View.INVISIBLE);
-            nuevosCasos.setVisibility(View.INVISIBLE);
-            curados.setVisibility(View.INVISIBLE);
-            fallecidos.setVisibility(View.INVISIBLE);
-        } else {
-            nombreCiudad.setVisibility(View.VISIBLE);
-            incidenciaAcumulada.setVisibility(View.VISIBLE);
-            casosTotales.setVisibility(View.VISIBLE);
-            nuevosCasos.setVisibility(View.VISIBLE);
-            curados.setVisibility(View.VISIBLE);
-            fallecidos.setVisibility(View.VISIBLE);
-        }
+
+    /**
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
-
-
 }
