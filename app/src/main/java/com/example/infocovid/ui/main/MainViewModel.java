@@ -16,22 +16,22 @@ import java.util.ArrayList;
 
 public class MainViewModel extends AndroidViewModel {
 
-    private MutableLiveData<ArrayList<Region>> currentData;
+    private MutableLiveData<Region> currentData;
 
     public MainViewModel(@NonNull @NotNull Application application) {
         super(application);
     }
 
 
-    public MutableLiveData<ArrayList<Region>> getData() {
-
-        currentData = new MutableLiveData<ArrayList<Region>>();
-
-        ArrayList<Region> regionList = new ArrayList<Region>();
-        regionList = PreferencesManager.getRegions(getApplication());
-        currentData.setValue(regionList);
-
+    public MutableLiveData<Region> getData() {
+        currentData = new MutableLiveData<Region>();
+        refreshData();
         return currentData;
+    }
+
+    public void refreshData() {
+        Region region = PreferencesManager.getCurrentRegion(getApplication());
+        currentData.setValue(region);
     }
 
 

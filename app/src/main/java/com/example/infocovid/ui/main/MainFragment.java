@@ -61,17 +61,19 @@ public class MainFragment extends Fragment {
         curados = root.findViewById(R.id.curadosTableNumero);
         fallecidos = root.findViewById(R.id.fallecidosTableNumero);
 
-        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Region>>() {
+        mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<Region>() {
             @Override
-            public void onChanged(@Nullable ArrayList<Region> regionList) {
+            public void onChanged(@Nullable Region currentRegion) {
 
-                if (regionList != null && regionList.size() > 0) {
-                    nombreCiudad.setText(regionList.get(region2Load).getName());
-                    incidenciaAcumulada.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getIncidentRate()));
-                    casosTotales.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getConfirmed()));
-                    nuevosCasos.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getActive()));
-                    curados.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getRecovered()));
-                    fallecidos.setText(String.valueOf(regionList.get(region2Load).getData().get(region2Load).getDeaths()));
+                if (currentRegion != null) {
+                    nombreCiudad.setText(currentRegion.getName());
+                    // Here we get the latest data set
+                    int latest = currentRegion.getData().size() -1;
+                    incidenciaAcumulada.setText(String.valueOf(currentRegion.getData().get(latest).getIncidentRate()));
+                    casosTotales.setText(String.valueOf(currentRegion.getData().get(latest).getConfirmed()));
+                    nuevosCasos.setText(String.valueOf(currentRegion.getData().get(latest).getActive()));
+                    curados.setText(String.valueOf(currentRegion.getData().get(latest).getRecovered()));
+                    fallecidos.setText(String.valueOf(currentRegion.getData().get(latest).getDeaths()));
                 }
             }
         });

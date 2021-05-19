@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class SettingsViewModel extends AndroidViewModel {
 
     private MutableLiveData<MySettings> currentData;
+    private MySettings mySettings;
 
     public SettingsViewModel(@NonNull @NotNull Application application) {
         super(application);
@@ -21,17 +22,19 @@ public class SettingsViewModel extends AndroidViewModel {
     public MutableLiveData<MySettings> getData() {
 
         currentData = new MutableLiveData<MySettings>();
-
-        MySettings mySettings = new MySettings();
-        mySettings = PreferencesManager.getMySettings(getApplication());
-        currentData.setValue(mySettings);
-
+        refreshData();
         return currentData;
     }
 
     public void setData(MySettings newSettings) {
-
         PreferencesManager.setMySettings(getApplication(), newSettings);
-
+        refreshData();
     }
+
+    public void refreshData() {
+
+        mySettings = PreferencesManager.getMySettings(getApplication());
+        currentData.setValue(mySettings);
+    }
+
 }

@@ -10,11 +10,12 @@
 
     <TextView
         android:id="@+id/ciudadNombre"
-        android:layout_width="126dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="MADRID"
+        android:text="----"
+        android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +25,7 @@
         android:id="@+id/imageMain"
         android:layout_width="244dp"
         android:layout_height="170dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/ciudadNombre"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageMain"
         android:text="Incidencia acumulada"
         android:layout_height="25dp" />
+
     <TextView
         android:id="@+id/incidenciaAcumuladaNumero"
         android:layout_width="90dp"

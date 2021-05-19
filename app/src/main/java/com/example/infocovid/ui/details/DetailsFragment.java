@@ -70,19 +70,21 @@ public class DetailsFragment extends Fragment {
         curadosTableNumeroAntes = root.findViewById(R.id.curadosTableNumero);
         fallecidosTableNumeroAntes = root.findViewById(R.id.fallecidosTableNumero);
 
-        detailsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Region>>() {
+        detailsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<Region>() {
             @Override
-            public void onChanged(@Nullable ArrayList<Region> regionList) {
-                if (regionList != null && regionList.size() > 0) {
-                    //Obtenemos el ultimo
-                    nuevosCasosTableDetailNumeroHoy.setText(newCasesToday = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 1).getActive()));
-                    curadosTableNumeroDetailHoy.setText(recoveredToday = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 1).getRecovered()));
-                    fallecidosTableNumeroDetailHoy.setText(deathsToday = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 1).getDeaths()));
+            public void onChanged(@Nullable Region currentRegion) {
+                if (currentRegion != null) {
+                    // Here we get the latest data set
+                    int latest = currentRegion.getData().size() -1;
+                    nuevosCasosTableDetailNumeroHoy.setText(String.valueOf(currentRegion.getData().get(latest).getActive()));
+                    curadosTableNumeroDetailHoy.setText(String.valueOf(currentRegion.getData().get(latest).getRecovered()));
+                    fallecidosTableNumeroDetailHoy.setText(String.valueOf(currentRegion.getData().get(latest).getDeaths()));
 
-                    //Obtenemos el penultimo
-                    nuevosCasosTableNumeroAntes.setText(newCasesLast = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 2).getActive()));
-                    curadosTableNumeroAntes.setText(recoveredLast = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 2).getRecovered()));
-                    fallecidosTableNumeroAntes.setText(deathsLast = String.valueOf(regionList.get(0).getData().get(regionList.get(0).getData().size() - 2).getDeaths()));
+                    // Here we get the second last
+                    int secondLast = currentRegion.getData().size() -2;
+                    nuevosCasosTableNumeroAntes.setText(String.valueOf(currentRegion.getData().get(secondLast).getActive()));
+                    curadosTableNumeroAntes.setText(String.valueOf(currentRegion.getData().get(secondLast).getRecovered()));
+                    fallecidosTableNumeroAntes.setText(String.valueOf(currentRegion.getData().get(secondLast).getDeaths()));
 
                     // Pintamos la grafica
 //                    drawChart(root, regionList);

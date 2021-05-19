@@ -22,20 +22,19 @@
         android:layout_marginTop="10dp"
         android:background="@color/white" />
 
-
-    <!--    <Button-->
-    <!--        android:id="@+id/refreshButton"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginLeft="20dp"-->
-    <!--        android:layout_marginTop="100dp"-->
-    <!--        android:layout_marginRight="20dp"-->
-    <!--        android:gravity="center"-->
-    <!--        android:onClick="SelectComunity"-->
-    <!--        android:text=""-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintRight_toRightOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/searchComunity" />-->
+    <!-- List view to list the bands -->
+    <ListView
+        android:id="@+id/favoriteRegionsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchComunity"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchComunity"
+        app:layout_constraintVertical_bias="0.015" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

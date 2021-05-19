@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Hiding the action bar
+        getSupportActionBar().hide();
+
 
         this.loadData();
 
@@ -160,8 +163,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.e("onResponse", "Response -->" + response.body().size());
 
                 regionList = new RegionList();
-                searchData = new SearchData();
-
+                searchData = PreferencesManager.getSearchData(getApplicationContext());
+                searchData.clearRegionNamesList();
 
                 for (int i = 0; i < response.body().size(); i ++) {
                     regionList.regions.add(i, response.body().get(i));

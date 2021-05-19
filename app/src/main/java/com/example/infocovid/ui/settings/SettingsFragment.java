@@ -98,7 +98,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        // listeners for the switches
+        // listeners for the switchers
         switchUsarUbicacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 saveSettings();
@@ -125,4 +125,5 @@ public class SettingsFragment extends Fragment {
         MySettings newSettings = new MySettings(switchUsarUbicacion.isChecked(), switchNotificaciones.isChecked(), switchActivarWidget.isChecked());
         settingsViewModel.setData(newSettings);
     }
+
 }

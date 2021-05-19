@@ -2,22 +2,23 @@ package com.example.infocovid.ui.search;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
-
+import android.widget.ListView;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.infocovid.R;
-import com.example.infocovid.datalayer.datamodels.RegionList;
 import com.example.infocovid.datalayer.model.SearchData;
-import com.example.infocovid.ui.main.MainViewModel;
+import com.example.infocovid.datalayer.model.adapters.FavoriteRegionsAdapter;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +38,10 @@ public class SearchFragment extends Fragment {
 
     // Views
     AutoCompleteTextView searchBox;
+    ListView favoriteRegionsListView;
+
+    // Adapter
+    FavoriteRegionsAdapter favoriteRegionsAdapter;
 
     // test array of strings for the autocomplete
     String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
@@ -72,6 +77,7 @@ public class SearchFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -82,7 +88,7 @@ public class SearchFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         //Creating the instance of ArrayAdapter containing list of fruit names
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> (this.getContext(), android.R.layout.select_dialog_item, fruits);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.select_dialog_item, fruits);
 
         //Getting the instance of AutoCompleteTextView
         searchBox = (AutoCompleteTextView) root.findViewById(R.id.searchComunity);
@@ -91,17 +97,64 @@ public class SearchFragment extends Fragment {
         searchBox.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
         searchBox.setTextColor(Color.RED);
 
+        favoriteRegionsListView = root.findViewById(R.id.favoriteRegionsListView);
+
         searchViewModel.getData().observe(getViewLifecycleOwner(), new Observer<SearchData>() {
             @Override
             public void onChanged(@Nullable SearchData searchData) {
-
                 if (searchData != null && searchData.getRegionNamesList().size() > 0) {
-                    ArrayAdapter<String> regionsAdapter = new ArrayAdapter<String> (root.getContext(), android.R.layout.select_dialog_item, searchData.getAutocompleteStrings());
-                    searchBox.setAdapter(regionsAdapter);
+                    processSearchBoxData(searchData, root);
+                    processFavoriteRegionsData(searchData);
                 }
             }
+
         });
 
         return root;
     }
+
+    public void processSearchBoxData(SearchData searchData, View root) {
+        ArrayAdapter<String> regionsAdapter = new ArrayAdapter<String>(root.getContext(), android.R.layout.select_dialog_item, searchData.getAutocompleteStrings());
+        searchBox.setAdapter(regionsAdapter);
+        searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Log.e("Search Activity", "" + regionsAdapter.getItem(position));
+                // The user has clicked, so we clear the text from the searchBox
+                searchBox.setText("");
+                // Now we get the index of the region selected
+                int itemIndex = searchData.getRegionNamesList().indexOf(regionsAdapter.getItem(position));
+                // and we ask the model to add it to the favorites list
+                searchViewModel.addToFavorites(itemIndex);
+            }
+        });
+
+    }
+
+    public void processFavoriteRegionsData(SearchData searchData) {
+
+        if (searchData.getFavoriteRegions().size() > 0) {
+            Log.e("Favorites: ", "Processing favorites");
+            // Filling the listview in with the bands
+            favoriteRegionsAdapter = new FavoriteRegionsAdapter(getActivity(), R.layout.favorite_item, searchData);
+
+            favoriteRegionsListView.setAdapter(favoriteRegionsAdapter);
+
+            favoriteRegionsListView.setClickable(true);
+
+            favoriteRegionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.e("Search Activity", "Clicking on favorites list on position " + position);
+                    searchViewModel.setMyFavoriteRegion(position);
+                }
+            });
+
+        } else {
+            Log.e("Favorites: ", "No favorites");
+            // If the response is NOT OK:
+            Toast.makeText(getActivity(), R.string.status_favorites_list_empty, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
