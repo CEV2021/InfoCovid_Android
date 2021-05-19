@@ -11,29 +11,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingBottom="10dp"
-            android:text="Lista de Favoritos"
-            android:textStyle="bold" />
-
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/favoriteList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingBottom="10dp"
-            android:text="Lista de Communidades"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/comunityList"
+            android:id="@+id/rvList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

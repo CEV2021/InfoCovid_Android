@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity{
         curados = findViewById(R.id.curadosTableNumero);
         fallecidos = findViewById(R.id.fallecidosTableNumero);
 
-        //listView
-        favoriteList = findViewById(R.id.favoriteList);
+
 
         loadData();
         loadSelectedCity();
