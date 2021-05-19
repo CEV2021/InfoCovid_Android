@@ -5,11 +5,14 @@ import android.os.Bundle;
 import com.example.infocovid.datalayer.datamodels.CityListAdapter;
 import com.example.infocovid.datalayer.datamodels.FavoriteListAdapter;
 import com.example.infocovid.datalayer.datamodels.PreferencesManager;
+import com.example.infocovid.datalayer.datamodels.RecyclerViewAdapter;
 import com.example.infocovid.datalayer.datamodels.Region;
 import com.example.infocovid.datalayer.datamodels.RegionList;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.util.Log;
@@ -20,8 +23,8 @@ import java.util.ArrayList;
 
 public class FavoriteListActivity extends AppCompatActivity {
 
-    ListView comunitylistView;
-    ListView favoriteList;
+    RecyclerView comunityRecyclerView;
+    RecyclerView favoriteRecyclerView;
     ArrayList<Region> regionList;
 
     @Override
@@ -29,15 +32,23 @@ public class FavoriteListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.favorite_list_layout);
 
-        comunitylistView = (ListView) findViewById(R.id.comunityList);
-        favoriteList = (ListView) findViewById(R.id.favoriteList);
+        comunityRecyclerView = (RecyclerView) findViewById(R.id.comunityList);
+        favoriteRecyclerView = (RecyclerView) findViewById(R.id.favoriteList);
 
        regionList =  loadAllRegions(regionList);
 
-        FavoriteListAdapter favoriteListAdapter = new FavoriteListAdapter(regionList, getApplicationContext());
-        favoriteList.setAdapter(favoriteListAdapter);
-        CityListAdapter cityListAdapter = new CityListAdapter(regionList, getApplicationContext());
-        comunitylistView.setAdapter(cityListAdapter);
+        RecyclerView.LayoutManager firstLayoutManager = new LinearLayoutManager(this);
+        favoriteRecyclerView.setLayoutManager(firstLayoutManager);
+
+        RecyclerView.LayoutManager secondLayoutManager = new LinearLayoutManager(this);
+        comunityRecyclerView.setLayoutManager(secondLayoutManager);
+
+        RecyclerViewAdapter firstAdapter = new RecyclerViewAdapter(this, regionList,0);
+        RecyclerViewAdapter secondAdapter = new RecyclerViewAdapter(this, regionList, 1);
+
+        favoriteRecyclerView.setAdapter(firstAdapter);
+        comunityRecyclerView.setAdapter(secondAdapter);
+
 
         Log.e("Favorite List", " " + regionList.size());
 
