@@ -6,7 +6,9 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.main.MainFragment"
+    android:paddingBottom="20dp"
+    >
 
     <TextView
         android:id="@+id/ciudadNombre"
@@ -41,46 +43,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageMain"
         android:text="Incidencia acumulada"
-        android:layout_height="25dp" />
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/incidenciaAcumuladaNumero"
-        android:layout_width="90dp"
+        android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/incidenciaAcumuladaTexto"
-        android:text="228"
-        android:layout_height="25dp"
+        android:text="999"
+        android:textSize="20dp"
+        android:layout_height="wrap_content"
         android:textStyle="bold"/>
     <TextView
         android:id="@+id/casosPorHabitantes"
-        android:layout_width="290dp"
+        android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/incidenciaAcumuladaNumero"
-        android:text="*Casos por cada 100000 habitantes"
-        android:layout_height="15dp" />
+        android:text="*Casos por cada 100.000 habitantes"
+        android:layout_height="wrap_content" />
 
-    // TableLAyout que gestiona lo que se muestra en  la tabla de datos.
+<!-- TableLAyout que gestiona lo que se muestra en  la tabla de datos.-->
     <TableLayout
         android:id="@+id/tablaDatos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="40dp"
         app:layout_constraintTop_toBottomOf="@+id/casosPorHabitantes"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_marginHorizontal="20dp"
         android:background="#807D7D">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"            >
+            android:gravity="center_horizontal"
+            >
 
             <ImageView
                 android:id="@+id/imageViewCasosTotalesTable"

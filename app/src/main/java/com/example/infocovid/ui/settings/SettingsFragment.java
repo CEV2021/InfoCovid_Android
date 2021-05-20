@@ -1,5 +1,6 @@
 package com.example.infocovid.ui.settings;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -7,18 +8,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.infocovid.R;
 import com.example.infocovid.datalayer.datamodels.RegionList;
 import com.example.infocovid.datalayer.model.MySettings;
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.ui.main.MainViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,11 +42,14 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     // Views
+    View root;
     Switch switchUsarUbicacion;
     Switch switchNotificaciones;
     Switch switchActivarWidget;
 
+
     private SettingsViewModel settingsViewModel;
+
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -80,7 +88,7 @@ public class SettingsFragment extends Fragment {
 
         settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_settings, container, false);
+        root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         // TextViews
         switchUsarUbicacion = root.findViewById(R.id.switchUsarUbicacion);
@@ -91,38 +99,46 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onChanged(@Nullable MySettings mySettings) {
                 if (mySettings != null) {
+                    // Setting the right value on the switchers
                     switchUsarUbicacion.setChecked(mySettings.getAllowLocation());
                     switchNotificaciones.setChecked(mySettings.getAllowNotifications());
                     switchActivarWidget.setChecked(mySettings.getEnableWidget());
+
+                    // Adding the listeners for the switchers
+                    switchUsarUbicacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            // Now we call the method to save the settings
+                            saveSettings();
+                        }
+                    });
+                    switchNotificaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            saveSettings();
+                        }
+                    });
+                    switchActivarWidget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            saveSettings();
+                        }
+                    });
+
                 }
-            }
-        });
-
-        // listeners for the switchers
-        switchUsarUbicacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                saveSettings();
-            }
-        });
-
-        switchNotificaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                saveSettings();
-            }
-        });
-
-        switchActivarWidget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                saveSettings();
             }
         });
 
         return root;
     }
 
+    /**
+     *
+     */
     public void saveSettings() {
-
+        // Getting the values of the switchers and using them to create a new settings object
         MySettings newSettings = new MySettings(switchUsarUbicacion.isChecked(), switchNotificaciones.isChecked(), switchActivarWidget.isChecked());
+
+        // Here we notify the user to get it out of the way (no possible issues can pop from saving the settings)
+        Snackbar.make(root, "Settings saved automatically", Snackbar.LENGTH_SHORT).show();
+        // And now we call the viewModel to store the data
         settingsViewModel.setData(newSettings);
     }
 

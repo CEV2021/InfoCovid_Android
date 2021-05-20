@@ -1,9 +1,11 @@
 package com.example.infocovid.ui.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,10 +15,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.infocovid.R;
-import com.example.infocovid.datalayer.datamodels.RegionList;
 import com.example.infocovid.datalayer.model.Region;
 
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,11 +34,9 @@ public class MainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    // Stuff for testing
-    Integer region2Load = 3;
-
-    // TextViews
+    // Views
     TextView nombreCiudad;
+    ImageView imageMain;
     TextView incidenciaAcumulada;
     TextView casosTotales;
     TextView nuevosCasos;
@@ -53,8 +51,9 @@ public class MainFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // TextViews
+        // Views
         nombreCiudad = root.findViewById(R.id.ciudadNombre);
+        imageMain = root.findViewById(R.id.imageMain);
         incidenciaAcumulada = root.findViewById(R.id.incidenciaAcumuladaNumero);
         casosTotales = root.findViewById(R.id.casosTotalesTableNumero);
         nuevosCasos = root.findViewById(R.id.nuevosCasosTableNumero);
@@ -66,10 +65,20 @@ public class MainFragment extends Fragment {
             public void onChanged(@Nullable Region currentRegion) {
 
                 if (currentRegion != null) {
+                    // if we have a region set as current, then we start rendering the data on the view
                     nombreCiudad.setText(currentRegion.getName());
                     // Here we get the latest data set
-                    int latest = currentRegion.getData().size() -1;
-                    incidenciaAcumulada.setText(String.valueOf(currentRegion.getData().get(latest).getIncidentRate()));
+                    int latest = currentRegion.getData().size() - 1;
+                    // Now we set the image depending on the incidency
+                    if (currentRegion.getData().get(latest).getIncidentRate() < 50) {
+                        imageMain.setImageResource(R.mipmap.ic_greencovid);
+                    } else if (currentRegion.getData().get(latest).getIncidentRate() < 150) {
+                        imageMain.setImageResource(R.mipmap.ic_yellowcovid);
+                    } else {
+                        imageMain.setImageResource(R.mipmap.ic_redcovid);
+                    }
+                    // and then we continue setting the data on the fragment
+                    incidenciaAcumulada.setText(String.format("%.2f", currentRegion.getData().get(latest).getIncidentRate()));
                     casosTotales.setText(String.valueOf(currentRegion.getData().get(latest).getConfirmed()));
                     nuevosCasos.setText(String.valueOf(currentRegion.getData().get(latest).getActive()));
                     curados.setText(String.valueOf(currentRegion.getData().get(latest).getRecovered()));

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.infocovid.R;
 import com.example.infocovid.datalayer.model.SearchData;
 import com.example.infocovid.datalayer.model.adapters.FavoriteRegionsAdapter;
+import com.google.android.material.snackbar.Snackbar;
 
 
 /**
@@ -42,9 +43,6 @@ public class SearchFragment extends Fragment {
 
     // Adapter
     FavoriteRegionsAdapter favoriteRegionsAdapter;
-
-    // test array of strings for the autocomplete
-    String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
 
     private SearchViewModel searchViewModel;
 
@@ -87,14 +85,11 @@ public class SearchFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
-        //Creating the instance of ArrayAdapter containing list of fruit names
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.select_dialog_item, fruits);
-
         //Getting the instance of AutoCompleteTextView
-        searchBox = (AutoCompleteTextView) root.findViewById(R.id.searchComunity);
+        searchBox = root.findViewById(R.id.searchComunity);
 
         searchBox.setThreshold(1);//will start working from first character
-        searchBox.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
+
         searchBox.setTextColor(Color.RED);
 
         favoriteRegionsListView = root.findViewById(R.id.favoriteRegionsListView);
@@ -119,13 +114,19 @@ public class SearchFragment extends Fragment {
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.e("Search Activity", "" + regionsAdapter.getItem(position));
                 // The user has clicked, so we clear the text from the searchBox
                 searchBox.setText("");
+
+                /* @todo: update the adapter with a viewHolder so we can access the region directly and ignore the position.
+                   -- This way we can hide places we already have on the favorites list! */
+
                 // Now we get the index of the region selected
                 int itemIndex = searchData.getRegionNamesList().indexOf(regionsAdapter.getItem(position));
                 // and we ask the model to add it to the favorites list
-                searchViewModel.addToFavorites(itemIndex);
+                if (!searchViewModel.addToFavorites(itemIndex)) {
+                    // Here we notify the user in case the Region couldn't get added. The only reason is a duplicated element
+                    Snackbar.make(root, "The region is already part of the list.", Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -142,12 +143,12 @@ public class SearchFragment extends Fragment {
 
             favoriteRegionsListView.setClickable(true);
 
-            favoriteRegionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.e("Search Activity", "Clicking on favorites list on position " + position);
-                    searchViewModel.setMyFavoriteRegion(position);
-                }
+            // Click listener for the favorite regions list
+            favoriteRegionsListView.setOnItemClickListener((parent, view, position, id) -> {
+                Log.e("Search Activity", "Clicking on favorites list on position " + position);
+                // We get the position, and ask the model to set it as the selected for display
+                // i.e.: the current Region to display on the app and widget
+                searchViewModel.setMyFavoriteRegion(position);
             });
 
         } else {

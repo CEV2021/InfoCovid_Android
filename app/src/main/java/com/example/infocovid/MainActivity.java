@@ -4,12 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -49,8 +50,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
         // Hiding the action bar
-        getSupportActionBar().hide();
-
+//        getSupportActionBar().hide();
 
         this.loadData();
 
@@ -63,7 +63,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
+        Toast t = Toast.makeText(getApplicationContext(),
+                "This a positioned toast message",
+                Toast.LENGTH_LONG);
+        t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 30);
+        t.show();
 
     }
 
@@ -113,6 +117,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             // If there is no connection:
             Toast.makeText(this,"No connection", Toast.LENGTH_SHORT).show();
         }
+
+        Log.e("Toasta: ", "Hello toast!");
+        CharSequence text = "Hello toast!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
+
     }
 
     //Getting data from preferences if we have it

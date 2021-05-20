@@ -13,6 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InfoCovid"
         android:usesCleartextTraffic="true">
+        <receiver android:name=".InfoCovidMiniWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/info_covid_mini_widget_info" />
+        </receiver>
+
         <activity android:name=".SearchActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".LocationsActivity" />

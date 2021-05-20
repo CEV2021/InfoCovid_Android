@@ -70,6 +70,8 @@ public class DetailsFragment extends Fragment {
         curadosTableNumeroAntes = root.findViewById(R.id.curadosTableNumero);
         fallecidosTableNumeroAntes = root.findViewById(R.id.fallecidosTableNumero);
 
+        lineChart = root.findViewById(R.id.lineChart);
+
         detailsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<Region>() {
             @Override
             public void onChanged(@Nullable Region currentRegion) {
@@ -87,7 +89,7 @@ public class DetailsFragment extends Fragment {
                     fallecidosTableNumeroAntes.setText(String.valueOf(currentRegion.getData().get(secondLast).getDeaths()));
 
                     // Pintamos la grafica
-//                    drawChart(root, regionList);
+                    drawChart(currentRegion);
                 }
             }
         });
@@ -129,10 +131,8 @@ public class DetailsFragment extends Fragment {
      * QUEDA PENDIENTE DE HABLAR CON EL TEAM DE IOS QUE DATOS PINTAMOS PARA QUE SEAN LOS MISMOS, DEJO EL EJEMPLO DE COMO SE PINTAN
      * SEGURAMENTE PINTAREMOS LOS ÚLTIMOS 7 DÍAS
      * */
-    public void drawChart(View root, RegionList regionList) {
+    public void drawChart(Region currentRegion) {
 
-
-        lineChart = root.findViewById(R.id.lineChart);
 
         //Metemos datos
         ArrayList<Entry> deadValues = new ArrayList<>();
@@ -140,17 +140,17 @@ public class DetailsFragment extends Fragment {
         ArrayList<Entry> cases = new ArrayList<>();
         ArrayList<Entry> activeCases = new ArrayList<>();
 
-        for (int i = 0; i < regionList.regions.get(0).getData().size()  ; i ++) { //LLenamos array
-            deadValues.add(new Entry(i,regionList.regions.get(0).getData().get(i).getDeaths()));
-            recovered.add(new Entry(i,regionList.regions.get(0).getData().get(i).getRecovered()));
-            cases.add(new Entry(i,regionList.regions.get(0).getData().get(i).getConfirmed()));
-            activeCases.add(new Entry(i,regionList.regions.get(0).getData().get(i).getActive()));
+        for (int i = 0; i < currentRegion.getData().size()  ; i ++) { //LLenamos array
+            deadValues.add(new Entry(i,currentRegion.getData().get(i).getDeaths()));
+            recovered.add(new Entry(i,currentRegion.getData().get(i).getRecovered()));
+            cases.add(new Entry(i,currentRegion.getData().get(i).getConfirmed()));
+            activeCases.add(new Entry(i,currentRegion.getData().get(i).getActive()));
         }
 
-        LineDataSet set1 = new LineDataSet(deadValues, regionList.regions.get(0).getName() + " deaths");
-        LineDataSet set2 = new LineDataSet(recovered, regionList.regions.get(0).getName() + " recovered");
-        LineDataSet set3 = new LineDataSet(cases, regionList.regions.get(0).getName() + " confirmed");
-        LineDataSet set4 = new LineDataSet(activeCases, regionList.regions.get(0).getName() + " active");
+        LineDataSet set1 = new LineDataSet(deadValues, currentRegion.getName() + " deaths");
+        LineDataSet set2 = new LineDataSet(recovered, currentRegion.getName() + " recovered");
+        LineDataSet set3 = new LineDataSet(cases, currentRegion.getName() + " confirmed");
+        LineDataSet set4 = new LineDataSet(activeCases, currentRegion.getName() + " active");
 
         set1.setFillAlpha(110);
         set1.setColor(Color.RED);

@@ -1,6 +1,7 @@
 package com.example.infocovid.datalayer.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SearchData {
     private ArrayList<String> regionNamesList;
@@ -18,7 +19,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @param regionNamesList
      * @param favoriteRegions
      */
@@ -29,7 +29,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @return
      */
     public Region getMyFavoriteRegion() {
@@ -37,7 +36,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @param myFavoriteRegion
      */
     public void setMyFavoriteRegion(Region myFavoriteRegion) {
@@ -45,7 +43,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @param index
      * @return
      */
@@ -57,7 +54,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @return ArrayList<String>
      */
     public ArrayList<String> getRegionNamesList() {
@@ -65,7 +61,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @param regionNamesList
      */
     public void setRegionNamesList(ArrayList<String> regionNamesList) {
@@ -73,7 +68,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @param regionName
      */
     public void addRegionName(String regionName) {
@@ -88,7 +82,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @return String[]
      */
     public String[] getAutocompleteStrings() {
@@ -96,7 +89,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @return
      */
     public ArrayList<Region> getFavoriteRegions() {
@@ -105,6 +97,37 @@ public class SearchData {
 
     /**
      *
+     * @param idRegion
+     * @return
+     */
+    public Region getRegionFromFavorites(Integer idRegion) {
+        Iterator<Region> iterator = this.favoriteRegions.iterator();
+        while (iterator.hasNext()) {
+            Region tempRegion = iterator.next();
+            if (tempRegion.getId().equals(idRegion)) {
+                return tempRegion;
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param nombreComunidad
+     * @return
+     */
+    public Region getRegionFromFavorites(String nombreComunidad) {
+        Iterator<Region> iterator = this.favoriteRegions.iterator();
+        while (iterator.hasNext()) {
+            Region tempRegion = iterator.next();
+            if (tempRegion.getName().equals(nombreComunidad)) {
+                return tempRegion;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param favoriteRegions
      */
     public void setFavoriteRegions(ArrayList<Region> favoriteRegions) {
@@ -112,7 +135,6 @@ public class SearchData {
     }
 
     /**
-     *
      * @param region
      */
     public void addFavoriteRegion(Region region) {

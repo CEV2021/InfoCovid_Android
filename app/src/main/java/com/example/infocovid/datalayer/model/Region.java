@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Region {
 
-    private int id;
+    private Integer id;
     private String name;
     private ArrayList<Data> data;
 
@@ -16,11 +16,11 @@ public class Region {
         this.data = data;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
