@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        Toast t = Toast.makeText(getApplicationContext(),
-                "This a positioned toast message",
-                Toast.LENGTH_LONG);
-        t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 30);
-        t.show();
+//        Toast t = Toast.makeText(getApplicationContext(),
+//                "This a positioned toast message",
+//                Toast.LENGTH_LONG);
+//        t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 30);
+//        t.show();
 
     }
 
@@ -135,14 +135,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             // If there is no connection:
             Toast.makeText(this,"No connection", Toast.LENGTH_SHORT).show();
         }
-
-        Log.e("Toasta: ", "Hello toast!");
-        CharSequence text = "Hello toast!";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
-
     }
 
     //Getting data from preferences if we have it
@@ -259,8 +251,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int id = item.getItemId();
 
         if(id == R.id.addItem) {
-
-
+            
         } else if(id == R.id.seeList) {
             navController.navigate(R.id.navigation_locations);
         }

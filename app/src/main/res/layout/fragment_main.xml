@@ -10,7 +10,7 @@
 
     <!-- TextView to show the name of the region -->
     <TextView
-        android:id="@+id/ciudadNombre"
+        android:id="@+id/regionName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -29,7 +29,7 @@
      >150 = red image
      -->
     <ImageView
-        android:id="@+id/imageMain"
+        android:id="@+id/covidStatus"
         android:layout_width="244dp"
         android:layout_height="170dp"
         android:layout_marginTop="10dp"
@@ -38,11 +38,11 @@
         android:src="@mipmap/ic_greencovid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ciudadNombre" />
+        app:layout_constraintTop_toBottomOf="@+id/regionName" />
 
     <!-- TextView to show the cumulative incidence label -->
     <TextView
-        android:id="@+id/incidenciaAcumuladaTexto"
+        android:id="@+id/cumulativeIncidenceLabel"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -52,11 +52,11 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageMain" />
+        app:layout_constraintTop_toBottomOf="@+id/covidStatus" />
 
     <!-- TextView to show the name of the cumulative incidence value -->
     <TextView
-        android:id="@+id/incidenciaAcumuladaNumero"
+        android:id="@+id/cumulativeIncidenceValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -66,11 +66,11 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/incidenciaAcumuladaTexto" />
+        app:layout_constraintTop_toBottomOf="@+id/cumulativeIncidenceLabel" />
 
     <!-- TextView to show the name of the cumulative incidence legend/ant -->
     <TextView
-        android:id="@+id/casosPorHabitantes"
+        android:id="@+id/cumulativeIncidenceAnt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -78,19 +78,19 @@
         android:text="@string/label_incidence_ant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/incidenciaAcumuladaNumero" />
+        app:layout_constraintTop_toBottomOf="@+id/cumulativeIncidenceValue" />
 
 
     <!-- TableLayout to display the data about the current city-->
     <TableLayout
-        android:id="@+id/tablaDatos"
+        android:id="@+id/regionData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"
         android:background="#807D7D"
-        app:layout_constraintTop_toBottomOf="@+id/casosPorHabitantes">
+        app:layout_constraintTop_toBottomOf="@+id/cumulativeIncidenceAnt">
 
         <!-- TableRow to show the data about total cases -->
         <TableRow
@@ -100,29 +100,29 @@
 
             <!-- ImageView to show the icon for total cases -->
             <ImageView
-                android:id="@+id/imageViewCasosTotalesTable"
+                android:id="@+id/regionDataTotalCasesIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@mipmap/ic_launchericoncovid" />
 
             <!-- TextView to show the label for total cases -->
             <TextView
-                android:id="@+id/casosTotalesTableTexto"
+                android:id="@+id/regionDataTotalCasesLabel"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="Casos totales:"
+                android:text="@string/label_cases_total"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <!-- TextView to show the value for total cases -->
             <TextView
-                android:id="@+id/casosTotalesTableNumero"
+                android:id="@+id/regionDataTotalCasesValue"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="264394"
+                android:text="@string/placeholder_cases_total_value"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -136,29 +136,29 @@
 
             <!-- ImageView to show the icon for new cases -->
             <ImageView
-                android:id="@+id/imageViewNuevosCasosTable"
+                android:id="@+id/regionDataNewCasesIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@mipmap/ic_nuevoscasos" />
 
             <!-- TextView to show the label for new cases -->
             <TextView
-                android:id="@+id/nuevosCasosTableTexto"
+                android:id="@+id/regionDataNewCasesLabel"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="Nuevos casos:"
+                android:text="@string/label_cases_new"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <!-- TextView to show the label for new cases -->
             <TextView
-                android:id="@+id/nuevosCasosTableNumero"
+                android:id="@+id/regionDataNewCasesValue"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="7465"
+                android:text="@string/placeholder_cases_new_value"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -173,32 +173,31 @@
 
             <!-- ImageView to show the icon for total cured -->
             <ImageView
-                android:id="@+id/imageViewCuradosTable"
+                android:id="@+id/regionDataTotalCuredIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@mipmap/ic_curados" />
 
             <!-- TextView to show the label for total cured -->
             <TextView
-                android:id="@+id/curadosTableTexto"
+                android:id="@+id/regionDataTotalCuredLabel"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="Curados:"
+                android:text="@string/label_cases_cured"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <!-- TextView to show the label for total cured -->
             <TextView
-                android:id="@+id/curadosTableNumero"
+                android:id="@+id/regionDataTotalCuredValue"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="1200"
+                android:text="@string/placeholder_cases_cured_value"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
-
 
         </TableRow>
 
@@ -210,29 +209,29 @@
 
             <!-- ImageView to show the icon for total deceased -->
             <ImageView
-                android:id="@+id/imageViewFallecidosTable"
+                android:id="@+id/regionDataTotalDeceasedIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@mipmap/ic_fallecidos" />
 
             <!-- TextView to show the label for total deceased -->
             <TextView
-                android:id="@+id/fallecidosTableTexto"
+                android:id="@+id/regionDataTotalDeceasedLabel"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="Fallecidos"
+                android:text="@string/label_cases_deceases"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <!-- TextView to show the label for total deceased -->
             <TextView
-                android:id="@+id/fallecidosTableNumero"
+                android:id="@+id/regionDataTotalDeceasedValue"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="670"
+                android:text="@string/placeholder_cases_deceases_value"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 

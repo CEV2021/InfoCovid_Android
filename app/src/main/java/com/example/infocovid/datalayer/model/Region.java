@@ -1,7 +1,5 @@
 package com.example.infocovid.datalayer.model;
 
-import com.example.infocovid.datalayer.datamodels.Data;
-
 import java.util.ArrayList;
 
 public class Region {

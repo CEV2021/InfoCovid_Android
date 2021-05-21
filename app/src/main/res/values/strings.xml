@@ -13,6 +13,8 @@
 
     <string name="header_current_data">Current</string>
     <string name="header_previous_data">Previous</string>
+    <string name="header_location_favorite">Favorite location</string>
+    <string name="header_location_list">My locations</string>
     <string name="header_my_settings">App settings</string>
     <string name="header_faq">FAQ</string>
 
@@ -25,6 +27,10 @@
     <!--  Text for placeholders  -->
     <string name="placeholder_region_name">-</string>
     <string name="placeholder_incidence_value">-</string>
+    <string name="placeholder_cases_total_value">Total cases:</string>
+    <string name="placeholder_cases_new_value">New cases:</string>
+    <string name="placeholder_cases_cured_value">Cured:</string>
+    <string name="placeholder_cases_deceases_value">Deceased:</string>
 
     <!--  Text for hints  -->
     <string name="hint_search_location">Search your preferred location</string>

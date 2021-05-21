@@ -18,6 +18,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.infocovid.MainActivity;
 import com.example.infocovid.R;
 import com.example.infocovid.datalayer.datamodels.RegionList;
 import com.example.infocovid.datalayer.model.MySettings;
