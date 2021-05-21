@@ -1,14 +1,30 @@
 package com.example.infocovid.ui.locations;
 
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infocovid.R;
+import com.example.infocovid.datalayer.model.SearchData;
+import com.example.infocovid.datalayer.model.adapters.FavoriteRegionsAdapter;
+import com.example.infocovid.ui.search.SearchViewModel;
+import com.google.android.material.snackbar.Snackbar;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +41,18 @@ public class LocationsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    // Views
+    View root;
+    AutoCompleteTextView searchBox;
+    ListView favoriteRegionsListView;
+    RecyclerView favoriteRegionsRecyclerView;
+
+    // Adapter
+//    FavoriteRegionsAdapter favoriteRegionsAdapter;
+    FavoriteRegionsAdapter favoriteRegionsAdapter;
+
+    private SearchViewModel searchViewModel;
 
     public LocationsFragment() {
         // Required empty public constructor
@@ -55,12 +83,60 @@ public class LocationsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_locations, container, false);
+        searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+
+        root = inflater.inflate(R.layout.fragment_search, container, false);
+
+//        favoriteRegionsListView = root.findViewById(R.id.favoriteRegionsListView);
+        favoriteRegionsRecyclerView = root.findViewById(R.id.favoriteRegionsReciclerView);
+
+        searchViewModel.getData().observe(getViewLifecycleOwner(), new Observer<SearchData>() {
+            @Override
+            public void onChanged(@Nullable SearchData searchData) {
+                if (searchData != null && searchData.getRegionNamesList().size() > 0) {
+                    processFavoriteRegionsData(searchData);
+                }
+            }
+
+        });
+
+        return root;
     }
+
+    public void processFavoriteRegionsData(SearchData searchData) {
+
+        if (searchData.getFavoriteRegions().size() > 0) {
+            Log.e("Favorites: ", "Processing favorites");
+            // Filling the listview in with the bands
+//            favoriteRegionsAdapter = new FavoriteRegionsAdapter(getActivity(), R.layout.favorite_item, searchData);
+//            favoriteRegionsListView.setAdapter(favoriteRegionsAdapter);
+//            favoriteRegionsListView.setClickable(true);
+
+
+//            // Click listener for the favorite regions list
+//            favoriteRegionsListView.setOnItemClickListener((parent, view, position, id) -> {
+//                Log.e("Search Activity", "Clicking on favorites list on position " + position);
+//                // We get the position, and ask the model to set it as the selected for display
+//                // i.e.: the current Region to display on the app and widget
+//                searchViewModel.setMyFavoriteRegion(position);
+//            });
+
+            favoriteRegionsAdapter = new FavoriteRegionsAdapter(searchData);
+            favoriteRegionsRecyclerView.setAdapter(favoriteRegionsAdapter);
+            favoriteRegionsRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+            favoriteRegionsRecyclerView.setClickable(true);
+
+        } else {
+            Log.e("Favorites: ", "No favorites");
+            // If the response is NOT OK:
+            Toast.makeText(getActivity(), R.string.status_favorites_list_empty, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

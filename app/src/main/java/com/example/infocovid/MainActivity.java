@@ -1,16 +1,21 @@
 package com.example.infocovid;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -21,11 +26,17 @@ import com.example.infocovid.datalayer.model.Region;
 import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.RegionService;
 import com.example.infocovid.datalayer.model.SearchData;
+import com.example.infocovid.ui.locations.LocationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -36,18 +47,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // old code -- to adapt
     BottomNavigationView nBottomNavigation;
-
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
 
     //API
     RegionList regionList;
     SearchData searchData;
     RegionService regionService;
+    NavController navController;
     boolean check = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        drawerLayout = findViewById(R.id.container);
+//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name);
+//        drawerLayout.addDrawerListener(drawerToggle);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Hiding the action bar
 //        getSupportActionBar().hide();
@@ -60,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_main, R.id.navigation_details, R.id.navigation_search, R.id.navigation_settings)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
         Toast t = Toast.makeText(getApplicationContext(),
@@ -176,7 +194,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 regionList = new RegionList();
                 searchData = PreferencesManager.getSearchData(getApplicationContext());
-                searchData.clearRegionNamesList();
+                if (searchData != null) {
+                    searchData.clearRegionNamesList();
+                } else {
+                    searchData = new SearchData();
+                }
 
                 for (int i = 0; i < response.body().size(); i ++) {
                     regionList.regions.add(i, response.body().get(i));
@@ -222,5 +244,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    /// App Bar -- Toolbar -- Menu Items
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_menu_items, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.addItem) {
+
+
+        } else if(id == R.id.seeList) {
+            navController.navigate(R.id.navigation_locations);
+        }
+
+        return true;
     }
 }

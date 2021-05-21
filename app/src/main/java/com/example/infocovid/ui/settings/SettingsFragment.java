@@ -103,26 +103,25 @@ public class SettingsFragment extends Fragment {
                     switchUsarUbicacion.setChecked(mySettings.getAllowLocation());
                     switchNotificaciones.setChecked(mySettings.getAllowNotifications());
                     switchActivarWidget.setChecked(mySettings.getEnableWidget());
-
-                    // Adding the listeners for the switchers
-                    switchUsarUbicacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            // Now we call the method to save the settings
-                            saveSettings();
-                        }
-                    });
-                    switchNotificaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            saveSettings();
-                        }
-                    });
-                    switchActivarWidget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            saveSettings();
-                        }
-                    });
-
                 }
+
+                // Adding the listeners for the switchers
+                switchUsarUbicacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        // Now we call the method to save the settings
+                        saveSettings();
+                    }
+                });
+                switchNotificaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        saveSettings();
+                    }
+                });
+                switchActivarWidget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        saveSettings();
+                    }
+                });
             }
         });
 

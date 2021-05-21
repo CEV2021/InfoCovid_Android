@@ -5,21 +5,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.locations.LocationsFragment">
+    tools:context=".ui.locations.LocationsFragment"
+    android:paddingBottom="20dp"
+    >
 
-
+<!--  Label for my favorite location  -->
     <TextView
-        android:id="@+id/tituloSettings"
-        android:layout_width="126dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="30dp"
+        android:id="@+id/myFavoriteRegionLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="AJUSTES"
+        android:text="----"
+        android:textSize="30dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--  My favorite location  -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favoriteRegionReciclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/myFavoriteRegionLabel"
+        app:layout_constraintTop_toBottomOf="@id/myFavoriteRegionLabel"
+        app:layout_constraintBottom_toTopOf="@+id/favoriteRegionsLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <!--  Label for my saved locations  -->
+    <TextView
+        android:id="@+id/favoriteRegionsLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="----"
+        android:textSize="30dp"
         android:textStyle="bold"
-        android:textSize="20dp"/>
+        android:layout_below="@id/favoriteRegionReciclerView"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteRegionReciclerView"
+        app:layout_constraintBottom_toTopOf="@+id/favoriteRegionsReciclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <!-- Element to list the favorite regions -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favoriteRegionsReciclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/favoriteRegionsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteRegionsLabel"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+<!--    <ListView-->
+<!--        android:id="@+id/favoriteRegionsListView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/searchComunity"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/searchComunity"-->
+<!--        app:layout_constraintVertical_bias="0.015"-->
+<!--        />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

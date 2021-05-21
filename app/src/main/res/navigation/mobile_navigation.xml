@@ -28,4 +28,9 @@
         android:name="com.example.infocovid.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/navigation_locations"
+        android:name="com.example.infocovid.ui.locations.LocationsFragment"
+        android:label="@string/title_locations"
+        tools:layout="@layout/fragment_locations" />
 </navigation>

@@ -1,4 +1,35 @@
 <resources>
+    <!--  Text for labels  -->
+    <string name="label_incidence">Cumulative incidence</string>
+    <string name="label_incidence_ant">*Cases per 100,000 inhabitants</string>
+    <string name="label_cases_total">Total cases:</string>
+    <string name="label_cases_new">New cases:</string>
+    <string name="label_cases_cured">Cured:</string>
+    <string name="label_cases_deceases">Deceased:</string>
+
+    <string name="label_settings_location">Use my current location</string>
+    <string name="label_settings_notifications">Notifications</string>
+    <string name="label_settings_widget">Activate info widget</string>
+
+    <string name="header_current_data">Current</string>
+    <string name="header_previous_data">Previous</string>
+    <string name="header_my_settings">App settings</string>
+    <string name="header_faq">FAQ</string>
+
+    <!--  Image descriptions  -->
+    <string name="img_desc_no_data">No incidence data available</string>
+    <string name="img_desc_covid_low">Incidence below 50</string>
+    <string name="img_desc_covid_medium">Incidence between 50 and 150</string>
+    <string name="img_desc_covid_high">Incidence over 150</string>
+
+    <!--  Text for placeholders  -->
+    <string name="placeholder_region_name">-</string>
+    <string name="placeholder_incidence_value">-</string>
+
+    <!--  Text for hints  -->
+    <string name="hint_search_location">Search your preferred location</string>
+
+
     <string name="app_name">InfoCovid</string>
     <string name="graphicsName">Incidencia Acumulada</string>
     <string name="homeName">Home</string>

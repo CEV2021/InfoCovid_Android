@@ -15,6 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.infocovid.R;
 import com.example.infocovid.datalayer.model.SearchData;
 import com.example.infocovid.datalayer.model.adapters.FavoriteRegionsAdapter;
@@ -38,10 +41,13 @@ public class SearchFragment extends Fragment {
     private String mParam2;
 
     // Views
+    View root;
     AutoCompleteTextView searchBox;
     ListView favoriteRegionsListView;
+    RecyclerView favoriteRegionsRecyclerView;
 
     // Adapter
+//    FavoriteRegionsAdapter favoriteRegionsAdapter;
     FavoriteRegionsAdapter favoriteRegionsAdapter;
 
     private SearchViewModel searchViewModel;
@@ -83,7 +89,7 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_search, container, false);
+        root = inflater.inflate(R.layout.fragment_search, container, false);
 
         //Getting the instance of AutoCompleteTextView
         searchBox = root.findViewById(R.id.searchComunity);
@@ -92,7 +98,8 @@ public class SearchFragment extends Fragment {
 
         searchBox.setTextColor(Color.RED);
 
-        favoriteRegionsListView = root.findViewById(R.id.favoriteRegionsListView);
+//        favoriteRegionsListView = root.findViewById(R.id.favoriteRegionsListView);
+        favoriteRegionsRecyclerView = root.findViewById(R.id.favoriteRegionsReciclerView);
 
         searchViewModel.getData().observe(getViewLifecycleOwner(), new Observer<SearchData>() {
             @Override
@@ -137,19 +144,23 @@ public class SearchFragment extends Fragment {
         if (searchData.getFavoriteRegions().size() > 0) {
             Log.e("Favorites: ", "Processing favorites");
             // Filling the listview in with the bands
-            favoriteRegionsAdapter = new FavoriteRegionsAdapter(getActivity(), R.layout.favorite_item, searchData);
+//            favoriteRegionsAdapter = new FavoriteRegionsAdapter(getActivity(), R.layout.favorite_item, searchData);
+//            favoriteRegionsListView.setAdapter(favoriteRegionsAdapter);
+//            favoriteRegionsListView.setClickable(true);
 
-            favoriteRegionsListView.setAdapter(favoriteRegionsAdapter);
 
-            favoriteRegionsListView.setClickable(true);
+//            // Click listener for the favorite regions list
+//            favoriteRegionsListView.setOnItemClickListener((parent, view, position, id) -> {
+//                Log.e("Search Activity", "Clicking on favorites list on position " + position);
+//                // We get the position, and ask the model to set it as the selected for display
+//                // i.e.: the current Region to display on the app and widget
+//                searchViewModel.setMyFavoriteRegion(position);
+//            });
 
-            // Click listener for the favorite regions list
-            favoriteRegionsListView.setOnItemClickListener((parent, view, position, id) -> {
-                Log.e("Search Activity", "Clicking on favorites list on position " + position);
-                // We get the position, and ask the model to set it as the selected for display
-                // i.e.: the current Region to display on the app and widget
-                searchViewModel.setMyFavoriteRegion(position);
-            });
+            favoriteRegionsAdapter = new FavoriteRegionsAdapter(searchData);
+            favoriteRegionsRecyclerView.setAdapter(favoriteRegionsAdapter);
+            favoriteRegionsRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+            favoriteRegionsRecyclerView.setClickable(true);
 
         } else {
             Log.e("Favorites: ", "No favorites");
