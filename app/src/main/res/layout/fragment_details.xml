@@ -6,12 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.details.DetailsFragment"
     android:paddingBottom="20dp"
-    >
+    tools:context=".ui.details.DetailsFragment">
 
+    <!-- LineChart to show the covid data for the current Region  -->
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
+        android:id="@+id/covidDataLineChart"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="10dp"
@@ -19,287 +19,280 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- TextView to show the header of the table with the latest covid data -->
     <TextView
-        android:id="@+id/HoyDetail"
+        android:id="@+id/latestRegionDataHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:text="HOY"
-        app:layout_constraintTop_toBottomOf="@+id/lineChart"
-        android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:paddingEnd="10dp"
+        android:gravity="center_horizontal"
         android:paddingStart="10dp"
-        />
+        android:paddingLeft="10dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/header_latest_data"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/covidDataLineChart" />
 
-
+    <!-- Table to display the latest covid data -->
     <TableLayout
-        android:id="@+id/tableDetailHoy"
+        android:id="@+id/latestRegionData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/HoyDetail"
+        android:layout_marginRight="20dp"
         android:background="#807D7D"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/latestRegionDataHeader">
 
+        <!-- TableRow to show the data about new cases -->
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"            >
+            android:gravity="center_horizontal">
 
+            <!-- ImageView to show the icon for total cases -->
             <ImageView
-                android:id="@+id/imageViewNuevosCasosDetailTable"
+                android:id="@+id/latestRegionDataNewCasesIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_nuevoscasos"
-                />
+                app:srcCompat="@mipmap/ic_nuevoscasos" />
 
+            <!-- TextView to show the label for new cases -->
             <TextView
-                android:id="@+id/nuevosCasosTableDetailTexto"
+                android:id="@+id/latestRegionDataNewCasesLabel"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:text="@string/nuevos_casos"
+                android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-
+                android:text="@string/label_cases_new"
                 android:textColor="@color/white"
+                android:textStyle="bold" />
 
-                />
-
+            <!-- TextView to show the value for new cases -->
             <TextView
-                android:id="@+id/nuevosCasosTableDetailNumero"
+                android:id="@+id/latestRegionDataNewCasesValue"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:text="7465"
                 android:gravity="center"
-                android:textStyle="bold"
+                android:text="@string/placeholder_cases_new_value"
                 android:textColor="@color/white"
-
-
-                />
-
-
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"            >
-
-            <ImageView
-                android:id="@+id/imageViewCuradosTableDetailHoy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_curados"
-                />
-
-            <TextView
-                android:id="@+id/curadosTableTextoDetailHoy"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="@string/curados"
-                android:gravity="center"
-                android:textColor="@color/white"
-
-                />
-
-            <TextView
-                android:id="@+id/curadosTableNumeroDetailHoy"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="1200"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-
-
-                />
-
-
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"            >
-
-            <ImageView
-                android:id="@+id/imageViewFallecidosTableDetailHoy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_fallecidos"
-                />
-
-            <TextView
-                android:id="@+id/fallecidosTableTextoDetailHoy"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="@string/fallecidos"
-                android:gravity="center"
-                android:textColor="@color/white"
-
-
-                />
-
-            <TextView
-                android:id="@+id/fallecidosTableNumeroDetailHoy"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="670"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-
-
-                />
-
+                android:textStyle="bold" />
 
         </TableRow>
 
-
-    </TableLayout>
-
-    <TextView
-        android:id="@+id/AntesDetail"
-        android:text="ANTES"
-        app:layout_constraintTop_toBottomOf="@+id/tableDetailHoy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        />
-
-    <TableLayout
-        android:id="@+id/tableDetailAntes"
-        app:layout_constraintTop_toBottomOf="@+id/AntesDetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:background="#807D7D"
-        >
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"            >
-
-            <ImageView
-                android:id="@+id/imageViewNuevosCasosTable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_nuevoscasos"
-                />
-
-            <TextView
-                android:id="@+id/nuevosCasosTableTexto"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="@string/nuevos_casos"
-                android:gravity="center"
-                android:textColor="@color/white"
-
-                />
-
-            <TextView
-                android:id="@+id/nuevosCasosTableNumero"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="7465"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-
-
-                />
-
-
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"            >
-
-            <ImageView
-                android:id="@+id/imageViewCuradosTable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_curados"
-                />
-
-            <TextView
-                android:id="@+id/curadosTableTexto"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="@string/curados"
-                android:gravity="center"
-                android:textColor="@color/white"
-
-                />
-
-            <TextView
-                android:id="@+id/curadosTableNumero"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="1200"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-
-
-                />
-
-
-        </TableRow>
+        <!-- TableRow to show the data about total cured -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal">
 
+            <!-- ImageView to show the icon for cured cases -->
             <ImageView
-                android:id="@+id/imageViewFallecidosTable"
+                android:id="@+id/latestRegionDataTotalCuredIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_fallecidos"
-                />
+                app:srcCompat="@mipmap/ic_curados" />
 
+            <!-- TextView to show the label for total cured -->
             <TextView
-                android:id="@+id/fallecidosTableTexto"
+                android:id="@+id/latestRegionDataTotalCuredLabel"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:text="Fallecidos"
+                android:layout_marginHorizontal="30dp"
                 android:gravity="center"
+                android:text="@string/label_cases_cured"
                 android:textColor="@color/white"
+                android:textStyle="bold" />
 
-
-                />
-
+            <!-- TextView to show the value for total cured -->
             <TextView
-                android:id="@+id/fallecidosTableNumero"
+                android:id="@+id/latestRegionDataTotalCuredValue"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:text="670"
                 android:gravity="center"
-                android:textStyle="bold"
+                android:text="@string/placeholder_cases_new_value"
                 android:textColor="@color/white"
-
-
-                />
-
+                android:textStyle="bold" />
 
         </TableRow>
 
+        <!-- TableRow to show the data about total deceased -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <!-- ImageView to show the icon for total deceased -->
+            <ImageView
+                android:id="@+id/latestRegionDataTotalDeceasedIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_fallecidos" />
+
+            <!-- TextView to show the label for total deceased -->
+            <TextView
+                android:id="@+id/latestRegionDataTotalDeceasedLabel"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="30dp"
+                android:gravity="center"
+                android:text="@string/label_cases_deceases"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <!-- TextView to show the value for total deceased -->
+            <TextView
+                android:id="@+id/latestRegionDataTotalDeceasedValue"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/placeholder_cases_deceases_value"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </TableRow>
 
     </TableLayout>
 
+    <!-- TextView to show the header of the table with the previous covid data -->
+    <TextView
+        android:id="@+id/previousRegionDataHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/header_previous_data"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/latestRegionData" />
 
+    <!-- Table to display the previous covid data -->
+    <TableLayout
+        android:id="@+id/previousRegionData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="#807D7D"
+        app:layout_constraintTop_toBottomOf="@+id/latestRegionDataHeader">
 
+        <!-- TableRow to show the data about new cases -->
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <!-- ImageView to show the icon for new cases -->
+            <ImageView
+                android:id="@+id/previousRegionDataNewCasesIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_nuevoscasos" />
+
+            <!-- TextView to show the label for total new -->
+            <TextView
+                android:id="@+id/previousRegionDataNewCasesLabel"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="30dp"
+                android:gravity="center"
+                android:text="@string/label_cases_new"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <!-- TextView to show the value for total new -->
+            <TextView
+                android:id="@+id/previousRegionDataNewCasesValue"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/placeholder_cases_new_value"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <!-- TableRow to show the data about total cured -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <!-- ImageView to show the icon for total cured -->
+            <ImageView
+                android:id="@+id/previousRegionDataTotalCuredIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_curados" />
+
+            <!-- TextView to show the label for cured cases -->
+            <TextView
+                android:id="@+id/previousRegionDataTotalCuredLabel"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="30dp"
+                android:gravity="center"
+                android:text="@string/label_cases_cured"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <!-- TextView to show the value for cured cases -->
+            <TextView
+                android:id="@+id/previousRegionDataTotalCuredValue"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/placeholder_cases_cured_value"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <!-- TableRow to show the data about total deceased -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <!-- ImageView to show the icon for total deceased -->
+            <ImageView
+                android:id="@+id/previousRegionDataTotalDeceasedIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_fallecidos" />
+
+            <!-- TextView to show the label for total deceased -->
+            <TextView
+                android:id="@+id/previousRegionDataTotalDeceasedLabel"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="30dp"
+                android:gravity="center"
+                android:text="@string/label_cases_deceases"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <!-- TextView to show the value for total deceased -->
+            <TextView
+                android:id="@+id/previousRegionDataTotalDeceasedValue"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/placeholder_cases_deceases_value"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+    </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

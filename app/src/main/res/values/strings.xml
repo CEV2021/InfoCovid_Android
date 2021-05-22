@@ -11,7 +11,7 @@
     <string name="label_settings_notifications">Notifications</string>
     <string name="label_settings_widget">Activate info widget</string>
 
-    <string name="header_current_data">Current</string>
+    <string name="header_latest_data">Current</string>
     <string name="header_previous_data">Previous</string>
     <string name="header_location_favorite">Favorite location</string>
     <string name="header_location_list">My locations</string>

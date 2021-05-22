@@ -48,7 +48,7 @@ public class MainFragment extends Fragment {
     TextView totalCuredTextView;
     TextView totalDeceasedTextView;
 
-    // View model for this view
+    // View model for this fragment
     private MainViewModel mainViewModel;
 
     public MainFragment() {

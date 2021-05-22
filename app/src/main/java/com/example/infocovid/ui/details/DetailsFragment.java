@@ -11,16 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.infocovid.R;
-import com.example.infocovid.datalayer.datamodels.RegionList;
+import com.example.infocovid.datalayer.model.Data;
 import com.example.infocovid.datalayer.model.Region;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-
 import java.util.ArrayList;
 
 /**
@@ -30,7 +28,7 @@ import java.util.ArrayList;
  */
 public class DetailsFragment extends Fragment {
 
-    private DetailsViewModel detailsViewModel;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,55 +39,63 @@ public class DetailsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    // Views
-    LineChart lineChart;
-    TextView nuevosCasosTableDetailNumeroHoy;
-    TextView curadosTableNumeroDetailHoy;
-    TextView fallecidosTableNumeroDetailHoy;
-    TextView nuevosCasosTableNumeroAntes;
-    TextView curadosTableNumeroAntes;
-    TextView fallecidosTableNumeroAntes;
 
-    //String to set the texts
-    String newCasesToday;
-    String recoveredToday;
-    String deathsToday;
-    String newCasesLast;
-    String recoveredLast;
-    String deathsLast;
+
+
+    // Views
+    View root;
+    LineChart covidDataLineChart;
+
+    TextView latestNewCasesTextView;
+    TextView latestTotalCuredTextView;
+    TextView latestTotalDeceasedTextView;
+
+    TextView previousNewCasesTextView;
+    TextView previousTotalCuredTextView;
+    TextView previousTotalDeceasedTextView;
+
+    // View model for this fragment
+    private DetailsViewModel detailsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         detailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_details, container, false);
+        root = inflater.inflate(R.layout.fragment_details, container, false);
 
-        nuevosCasosTableDetailNumeroHoy = root.findViewById(R.id.nuevosCasosTableDetailNumero);
-        curadosTableNumeroDetailHoy = root.findViewById(R.id.curadosTableNumeroDetailHoy);
-        fallecidosTableNumeroDetailHoy = root.findViewById(R.id.fallecidosTableNumeroDetailHoy);
-        nuevosCasosTableNumeroAntes = root.findViewById(R.id.nuevosCasosTableNumero);
-        curadosTableNumeroAntes = root.findViewById(R.id.curadosTableNumero);
-        fallecidosTableNumeroAntes = root.findViewById(R.id.fallecidosTableNumero);
+        latestNewCasesTextView = root.findViewById(R.id.latestRegionDataNewCasesValue);
+        latestTotalCuredTextView = root.findViewById(R.id.latestRegionDataTotalCuredValue);
+        latestTotalDeceasedTextView = root.findViewById(R.id.latestRegionDataTotalDeceasedValue);
 
-        lineChart = root.findViewById(R.id.lineChart);
+        previousNewCasesTextView = root.findViewById(R.id.previousRegionDataNewCasesValue);
+        previousTotalCuredTextView = root.findViewById(R.id.previousRegionDataTotalCuredValue);
+        previousTotalDeceasedTextView = root.findViewById(R.id.previousRegionDataTotalDeceasedValue);
+
+        covidDataLineChart = root.findViewById(R.id.covidDataLineChart);
 
         detailsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<Region>() {
             @Override
             public void onChanged(@Nullable Region currentRegion) {
                 if (currentRegion != null) {
-                    // Here we get the latest data set
-                    int latest = currentRegion.getData().size() -1;
-                    nuevosCasosTableDetailNumeroHoy.setText(String.valueOf(currentRegion.getData().get(latest).getActive()));
-                    curadosTableNumeroDetailHoy.setText(String.valueOf(currentRegion.getData().get(latest).getRecovered()));
-                    fallecidosTableNumeroDetailHoy.setText(String.valueOf(currentRegion.getData().get(latest).getDeaths()));
+
+                    drawChart(currentRegion);
+
+                    // Here we get the index of the latest data set
+                    int latest = currentRegion.getData().size() - 1;
+                    // ...an the dataset as well
+                    Data latestData = currentRegion.getData().get(latest);
+
+                    latestNewCasesTextView.setText(String.valueOf(latestData.getActive()));
+                    latestTotalCuredTextView.setText(String.valueOf(latestData.getRecovered()));
+                    latestTotalDeceasedTextView.setText(String.valueOf(latestData.getDeaths()));
+
+                    // ...an now we get the previous dataset as well
+                    Data previousData = currentRegion.getData().get(latest);
 
                     // Here we get the second last
-                    int secondLast = currentRegion.getData().size() -2;
-                    nuevosCasosTableNumeroAntes.setText(String.valueOf(currentRegion.getData().get(secondLast).getActive()));
-                    curadosTableNumeroAntes.setText(String.valueOf(currentRegion.getData().get(secondLast).getRecovered()));
-                    fallecidosTableNumeroAntes.setText(String.valueOf(currentRegion.getData().get(secondLast).getDeaths()));
+                    previousNewCasesTextView.setText(String.valueOf(previousData.getActive()));
+                    previousTotalCuredTextView.setText(String.valueOf(previousData.getRecovered()));
+                    previousTotalDeceasedTextView.setText(String.valueOf(previousData.getDeaths()));
 
-                    // Pintamos la grafica
-                    drawChart(currentRegion);
                 }
             }
         });
@@ -128,29 +134,30 @@ public class DetailsFragment extends Fragment {
     }
 
     /*
+     * @todo: check comment below:
      * QUEDA PENDIENTE DE HABLAR CON EL TEAM DE IOS QUE DATOS PINTAMOS PARA QUE SEAN LOS MISMOS, DEJO EL EJEMPLO DE COMO SE PINTAN
      * SEGURAMENTE PINTAREMOS LOS ÚLTIMOS 7 DÍAS
      * */
     public void drawChart(Region currentRegion) {
 
-
         //Metemos datos
-        ArrayList<Entry> deadValues = new ArrayList<>();
-        ArrayList<Entry> recovered = new ArrayList<>();
-        ArrayList<Entry> cases = new ArrayList<>();
-        ArrayList<Entry> activeCases = new ArrayList<>();
+        ArrayList<Entry> deceasedValues = new ArrayList<>();
+        ArrayList<Entry> curedValues = new ArrayList<>();
+        ArrayList<Entry> casesValues = new ArrayList<>();
+        ArrayList<Entry> activeValues = new ArrayList<>();
+
 
         for (int i = 0; i < currentRegion.getData().size()  ; i ++) { //LLenamos array
-            deadValues.add(new Entry(i,currentRegion.getData().get(i).getDeaths()));
-            recovered.add(new Entry(i,currentRegion.getData().get(i).getRecovered()));
-            cases.add(new Entry(i,currentRegion.getData().get(i).getConfirmed()));
-            activeCases.add(new Entry(i,currentRegion.getData().get(i).getActive()));
+            deceasedValues.add(new Entry(i,currentRegion.getData().get(i).getDeaths()));
+            curedValues.add(new Entry(i,currentRegion.getData().get(i).getRecovered()));
+            casesValues.add(new Entry(i,currentRegion.getData().get(i).getConfirmed()));
+            activeValues.add(new Entry(i,currentRegion.getData().get(i).getActive()));
         }
 
-        LineDataSet set1 = new LineDataSet(deadValues, currentRegion.getName() + " deaths");
-        LineDataSet set2 = new LineDataSet(recovered, currentRegion.getName() + " recovered");
-        LineDataSet set3 = new LineDataSet(cases, currentRegion.getName() + " confirmed");
-        LineDataSet set4 = new LineDataSet(activeCases, currentRegion.getName() + " active");
+        LineDataSet set1 = new LineDataSet(deceasedValues, currentRegion.getName() + " deaths");
+        LineDataSet set2 = new LineDataSet(curedValues, currentRegion.getName() + " recovered");
+        LineDataSet set3 = new LineDataSet(casesValues, currentRegion.getName() + " confirmed");
+        LineDataSet set4 = new LineDataSet(activeValues, currentRegion.getName() + " active");
 
         set1.setFillAlpha(110);
         set1.setColor(Color.RED);
@@ -173,7 +180,6 @@ public class DetailsFragment extends Fragment {
 
         LineData data = new LineData(dataSets);
 
-        lineChart.setData(data);
-
+        covidDataLineChart.setData(data);
     }
 }

@@ -3,40 +3,29 @@ package com.example.infocovid;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-
-
-import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
-
 import com.example.infocovid.datalayer.model.ApiClient;
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.model.Region;
 import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.RegionService;
 import com.example.infocovid.datalayer.model.SearchData;
-import com.example.infocovid.ui.locations.LocationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -60,32 +49,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Setting the Main Activity as the activity for the app
         setContentView(R.layout.activity_main);
 
-//        drawerLayout = findViewById(R.id.container);
-//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name);
-//        drawerLayout.addDrawerListener(drawerToggle);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Hiding the action bar
-//        getSupportActionBar().hide();
-
+        // Calling the method to load data
         this.loadData();
 
+        // Creating a bottomNavigation element to display the menu
+        // - the bottom navigation is set on the main activity
+        // - we use this plus a navigation controller to handle the navigation throughout the app in a simpler way
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
+        // Passing each of the ids from the navigation item into the app bar
+        // - if we want to include a new item on the navigation bar, we add it in here
+        // - the fragment which gets displayed it's defined on the file mobile_navigation.xml
+        // - for more info @see /res/navigation/mobile_navigation.xml
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_main, R.id.navigation_details, R.id.navigation_search, R.id.navigation_settings)
                 .build();
+
+        // Now we set the navigation controller
+        // - we have the nav controller as a class variable so we can access it on any place of the MainActivity class
+        // - also, by doing that we can easily handle the navigation from within the fragments in case we'd need it
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        // Here we link the action bar and the bottom navigation so the status of the appbar (like the titles) change
+        // - with this, the bottom navigation also reacts to those changes
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-//        Toast t = Toast.makeText(getApplicationContext(),
-//                "This a positioned toast message",
-//                Toast.LENGTH_LONG);
-//        t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 30);
-//        t.show();
 
     }
 
@@ -251,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int id = item.getItemId();
 
         if(id == R.id.addItem) {
-            
+
         } else if(id == R.id.seeList) {
             navController.navigate(R.id.navigation_locations);
         }
