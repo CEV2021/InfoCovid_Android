@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class DetailsViewModel extends AndroidViewModel {
 
     private MutableLiveData<Region> currentData;
-    
+
     public DetailsViewModel(@NonNull @NotNull Application application) {
         super(application);
     }

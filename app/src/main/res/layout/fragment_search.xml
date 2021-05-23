@@ -25,29 +25,4 @@
         android:background="@color/white"
         />
 
-    <!-- Element to list the favorite regions -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favoriteRegionsReciclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/searchComunity"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchComunity" />
-<!--    <ListView-->
-<!--        android:id="@+id/favoriteRegionsListView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/searchComunity"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="1.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/searchComunity"-->
-<!--        app:layout_constraintVertical_bias="0.015"-->
-<!--        />-->
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

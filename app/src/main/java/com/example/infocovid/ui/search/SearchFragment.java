@@ -11,10 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,12 +46,6 @@ public class SearchFragment extends Fragment {
     // Views
     View root;
     AutoCompleteTextView searchBox;
-    ListView favoriteRegionsListView;
-    RecyclerView favoriteRegionsRecyclerView;
-
-    // Adapter
-//    FavoriteRegionsAdapter favoriteRegionsAdapter;
-    FavoriteRegionsAdapter favoriteRegionsAdapter;
 
     private SearchViewModel searchViewModel;
 
@@ -98,15 +95,11 @@ public class SearchFragment extends Fragment {
 
         searchBox.setTextColor(Color.RED);
 
-//        favoriteRegionsListView = root.findViewById(R.id.favoriteRegionsListView);
-        favoriteRegionsRecyclerView = root.findViewById(R.id.favoriteRegionsReciclerView);
-
         searchViewModel.getData().observe(getViewLifecycleOwner(), new Observer<SearchData>() {
             @Override
             public void onChanged(@Nullable SearchData searchData) {
                 if (searchData != null && searchData.getRegionNamesList().size() > 0) {
                     processSearchBoxData(searchData, root);
-                    processFavoriteRegionsData(searchData);
                 }
             }
 
@@ -129,44 +122,15 @@ public class SearchFragment extends Fragment {
 
                 // Now we get the index of the region selected
                 int itemIndex = searchData.getRegionNamesList().indexOf(regionsAdapter.getItem(position));
-                // and we ask the model to add it to the favorites list
-                if (!searchViewModel.addToFavorites(itemIndex)) {
-                    // Here we notify the user in case the Region couldn't get added. The only reason is a duplicated element
-                    Snackbar.make(root, "The region is already part of the list.", Snackbar.LENGTH_SHORT).show();
+                // and we ask the model to set the new current region
+                if (searchViewModel.setMyFavoriteRegion(itemIndex)) {
+                    // now we call the navigation Controller to go to the main fragment and display the current selection
+                    Navigation.findNavController(root).navigate(R.id.navigation_main);
                 }
+
+
             }
         });
-
-    }
-
-    public void processFavoriteRegionsData(SearchData searchData) {
-
-        if (searchData.getFavoriteRegions().size() > 0) {
-            Log.e("Favorites: ", "Processing favorites");
-            // Filling the listview in with the bands
-//            favoriteRegionsAdapter = new FavoriteRegionsAdapter(getActivity(), R.layout.favorite_item, searchData);
-//            favoriteRegionsListView.setAdapter(favoriteRegionsAdapter);
-//            favoriteRegionsListView.setClickable(true);
-
-
-//            // Click listener for the favorite regions list
-//            favoriteRegionsListView.setOnItemClickListener((parent, view, position, id) -> {
-//                Log.e("Search Activity", "Clicking on favorites list on position " + position);
-//                // We get the position, and ask the model to set it as the selected for display
-//                // i.e.: the current Region to display on the app and widget
-//                searchViewModel.setMyFavoriteRegion(position);
-//            });
-
-            favoriteRegionsAdapter = new FavoriteRegionsAdapter(searchData);
-            favoriteRegionsRecyclerView.setAdapter(favoriteRegionsAdapter);
-            favoriteRegionsRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-            favoriteRegionsRecyclerView.setClickable(true);
-
-        } else {
-            Log.e("Favorites: ", "No favorites");
-            // If the response is NOT OK:
-            Toast.makeText(getActivity(), R.string.status_favorites_list_empty, Toast.LENGTH_SHORT).show();
-        }
     }
 
 }

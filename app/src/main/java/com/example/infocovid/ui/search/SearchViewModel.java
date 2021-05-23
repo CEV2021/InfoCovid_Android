@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.model.Region;
+import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.SearchData;
 import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
@@ -25,29 +26,16 @@ public class SearchViewModel extends AndroidViewModel {
         return currentData;
     }
 
-    public boolean addToFavorites(Integer index) {
-        Region regionToAdd = PreferencesManager.getRegions(getApplication()).get(index);
-        if (searchData.getMyFavoriteRegion() == null) {
-            searchData.setMyFavoriteRegion(regionToAdd);
-            PreferencesManager.setCurrentRegion(getApplication(), regionToAdd);
-        }
+    public boolean setMyFavoriteRegion(Integer index) {
 
-        if (searchData.getRegionFromFavorites(regionToAdd.getId()) == null) {
-            searchData.addFavoriteRegion(regionToAdd);
-            PreferencesManager.setSearchData(getApplication(), searchData);
-            refreshData();
-            // We return TRUE because we could add the region to the favorites list
-            return true;
-        } else {
-            refreshData();
-            // We return FALSE because it was not possible to add the region to the favorites list
-            return false;
-        }
-    }
-
-    public void setMyFavoriteRegion(Integer index) {
         // First we get the Region we are going to handle
-        Region regionToAdd = searchData.getFavoriteRegions().get(index);
+        // ...we start by getting the name
+        String regionNameToAdd = searchData.getRegionNamesList().get(index);
+        // .. and, based on that, we identify and pull the region from the full regions list
+        RegionList regionsList = new RegionList();
+        regionsList.regions = PreferencesManager.getRegions(getApplication());
+        Region regionToAdd = regionsList.getRegionByName(regionNameToAdd);
+
         // Now we set the favorite on the searchData object we are using on this adapter
         searchData.setMyFavoriteRegion(regionToAdd);
 
@@ -57,6 +45,8 @@ public class SearchViewModel extends AndroidViewModel {
 
         // Now we call the refresh method to reload data and notify the View
         refreshData();
+
+        return true;
     }
 
     public void refreshData() {

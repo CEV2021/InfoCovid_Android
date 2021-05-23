@@ -183,7 +183,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:background="#807D7D"
-        app:layout_constraintTop_toBottomOf="@+id/latestRegionDataHeader">
+        app:layout_constraintTop_toBottomOf="@+id/previousRegionDataHeader">
 
         <!-- TableRow to show the data about new cases -->
         <TableRow

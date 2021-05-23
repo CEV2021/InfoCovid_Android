@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.model.Region;
+import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.SearchData;
 
 import org.jetbrains.annotations.NotNull;

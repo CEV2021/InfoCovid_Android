@@ -3,7 +3,6 @@ package com.example.infocovid.datalayer.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.infocovid.datalayer.model.Region;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

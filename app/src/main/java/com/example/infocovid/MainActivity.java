@@ -3,6 +3,7 @@ package com.example.infocovid;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
+
 import com.example.infocovid.datalayer.model.ApiClient;
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.model.Region;
@@ -21,10 +23,14 @@ import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.RegionService;
 import com.example.infocovid.datalayer.model.SearchData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,12 +38,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     // old code -- to adapt
     BottomNavigationView nBottomNavigation;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
+
+
+    BottomNavigationView navView;
 
     //API
     RegionList regionList;
@@ -59,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Creating a bottomNavigation element to display the menu
         // - the bottom navigation is set on the main activity
         // - we use this plus a navigation controller to handle the navigation throughout the app in a simpler way
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
 
         // Passing each of the ids from the navigation item into the app bar
         // - if we want to include a new item on the navigation bar, we add it in here
@@ -125,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             Log.e("loading stuff", "Not connected");
             // If there is no connection:
-            Toast.makeText(this,"No connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No connection", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -168,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     // Getting data from API and save in Preferences
-    public  void getData() {
+    public void getData() {
         Call<ArrayList<Region>> call = regionService.getRegions();
 
         call.enqueue(new Callback<ArrayList<Region>>() {
@@ -184,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     searchData = new SearchData();
                 }
 
-                for (int i = 0; i < response.body().size(); i ++) {
+                for (int i = 0; i < response.body().size(); i++) {
                     regionList.regions.add(i, response.body().get(i));
                     searchData.addRegionName(response.body().get(i).getName());
 
@@ -193,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 PreferencesManager.setRegions(getApplicationContext(), regionList.regions);
                 PreferencesManager.setSearchData(getApplicationContext(), searchData);
-                check = true;;
+                check = true;
+                ;
 
                 RegionList list = new RegionList();
                 list.regions = PreferencesManager.getRegions(getApplicationContext());
@@ -240,14 +250,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
 
-        if(id == R.id.addItem) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                navController.navigate(R.id.navigation_main);
+                return true;
 
-        } else if(id == R.id.seeList) {
-            navController.navigate(R.id.navigation_locations);
+            case R.id.addItem:
+                SearchData searchData = PreferencesManager.getSearchData(getApplication());
+                Region currentRegion = PreferencesManager.getCurrentRegion(getApplication());
+
+                if (searchData.getRegionFromFavorites(currentRegion.getId()) == null) {
+                    searchData.getFavoriteRegions().add(currentRegion);
+                    PreferencesManager.setSearchData(getApplication(), searchData);
+                    Snackbar.make(navView, "Region added to the favorites list", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(navView, "The region was already on the list", Snackbar.LENGTH_SHORT).show();
+                }
+
+                return true;
+
+            case R.id.seeList:
+                navController.navigate(R.id.navigation_locations);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return true;
     }
 }

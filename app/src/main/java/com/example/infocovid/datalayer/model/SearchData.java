@@ -113,14 +113,14 @@ public class SearchData {
 
     /**
      *
-     * @param nombreComunidad
+     * @param regionName
      * @return
      */
-    public Region getRegionFromFavorites(String nombreComunidad) {
+    public Region getRegionFromFavorites(String regionName) {
         Iterator<Region> iterator = this.favoriteRegions.iterator();
         while (iterator.hasNext()) {
             Region tempRegion = iterator.next();
-            if (tempRegion.getName().equals(nombreComunidad)) {
+            if (tempRegion.getName().equals(regionName)) {
                 return tempRegion;
             }
         }
