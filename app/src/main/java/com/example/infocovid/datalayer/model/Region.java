@@ -8,6 +8,12 @@ public class Region {
     private String name;
     private ArrayList<Data> data;
 
+    public Region() {
+        this.id = 0;
+        this.name = "";
+        this.data = new ArrayList<Data>();
+    }
+
     public Region(int id, String name, ArrayList<Data> data ) {
         this.id = id;
         this.name = name;

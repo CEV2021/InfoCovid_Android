@@ -1,13 +1,237 @@
 package com.example.infocovid.utils;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.infocovid.InfoCovidMiniWidget;
+import com.example.infocovid.datalayer.model.Point;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class GeneralHelper {
+
+    public static void coordinatesTester(View view) {
+
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(view.getContext(), Locale.getDefault());
+        ArrayList<Point> coordinatesList = new ArrayList<Point>();
+
+        try {
+            Point coordenadas = new Point(37.3828300, -5.9731700);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            String comunidad = addresses.get(0).getAdminArea();
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(41.6560600, -0.8773400);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(43.3602900, -5.8447600);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(39.5693900, 2.6502400);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(39.4697500, -0.3773900);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(28.0997300, -15.4134300);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(43.4647200, -3.8044400);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(39.8581000, -4.0226300);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(41.6551800, -4.7237200);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(41.3887900, 2.1589900);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(35.8902800, -5.3075000);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(39.1666700, -6.1666700);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(42.2328200, -8.7226400);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(42.4666700, -2.4500000);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(40.4165000, -3.7025600);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(35.2936900, -2.9383300);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(37.9870400, -1.1300400);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(42.8168700, -1.6432300);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+
+            coordenadas = new Point(43.2627100, -2.9252800);
+            addresses = geocoder.getFromLocation(coordenadas.latitude, coordenadas.longitude, 1);
+            comunidad = addresses.get(0).getAdminArea();
+            Log.e("Comunidad ", comunidad);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Normalizes the region name based on google data.
+     * Method to convert region names data to google location standard so we don't have issues when using GPS to set the current location.
+     * @param regionName
+     * @return
+     */
+    public static String normalizeRegionName(String regionName) {
+        // this is the code to get the current locale
+        // String currentLocale = Locale.getDefault().getLanguage();
+
+        // this is in case we want to control the names based on the locale
+//        if (Locale.getDefault().getLanguage().equals(new Locale("es").getLanguage())) {
+//
+//        }
+
+        String nameToReturn = "";
+         switch (regionName) {
+             case "Andalusia":
+                 nameToReturn = "Andalucía";
+                 break;
+             case "Aragon":
+                 nameToReturn = "Aragón";
+                 break;
+             case "Asturias":
+                 nameToReturn = "Principado de Asturias";
+                 break;
+             case "Baleares":
+                 nameToReturn = "Islas Baleares";
+                 break;
+             case "C. Valenciana":
+                 nameToReturn = "Comunidad Valenciana";
+                 break;
+             case "Canarias":
+                 nameToReturn = "Canarias";
+                 break;
+             case "Cantabria":
+                 nameToReturn = "Cantabria";
+                 break;
+             case "Castilla - La Mancha":
+                 nameToReturn = "Castilla-La Mancha";
+                 break;
+             case "Castilla y Leon":
+                 nameToReturn = "Castilla y León";
+                 break;
+             case "Catalonia":
+                 nameToReturn = "Catalunya";
+                 break;
+             case "Ceuta":
+                 nameToReturn = "Ceuta";
+                 break;
+             case "Extremadura":
+                 nameToReturn = "Extremadura";
+                 break;
+             case "Galicia":
+                 nameToReturn = "Galicia";
+                 break;
+             case "La Rioja":
+                 nameToReturn = "La Rioja";
+                 break;
+             case "Madrid":
+                 nameToReturn = "Comunidad de Madrid";
+                 break;
+             case "Melilla":
+                 nameToReturn = "Melilla";
+                 break;
+             case "Murcia":
+                 nameToReturn = "Región de Murcia";
+                 break;
+             case "Navarra":
+                 nameToReturn = "Navarra";
+                 break;
+             case "Pais Vasco":
+                 nameToReturn = "Euskadi";
+                 break;
+         }
+
+
+        return nameToReturn;
+    }
+
+    public static void updateAllWidgets(View view){
+        // Getting context
+        Context context = view.getContext();
+        // Extracting the widget IDs to update
+        ComponentName name = new ComponentName(context, InfoCovidMiniWidget.class);
+        int [] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
+        // Creating the intent to trigger the update
+        Intent intentUpdate = new Intent(context, InfoCovidMiniWidget.class);
+        intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        // Adding the ids
+//        int[] idArray = new int[]{appWidgetId};
+        intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        // Wrapping the intent in a pending
+        PendingIntent pendingUpdate = PendingIntent.getBroadcast(
+                context, 1, intentUpdate,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 
 //    Activity myActivity;
 //

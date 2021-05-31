@@ -77,25 +77,27 @@ public class DetailsFragment extends Fragment {
             public void onChanged(@Nullable Region currentRegion) {
                 if (currentRegion != null) {
 
-                    drawChart(currentRegion);
+                    // processing the latest data (if we have data, of course)
+                    if (currentRegion.getData().size() != 0 ) {
+                        drawChart(currentRegion);
 
-                    // Here we get the index of the latest data set
-                    int latest = currentRegion.getData().size() - 1;
-                    // ...an the dataset as well
-                    Data latestData = currentRegion.getData().get(latest);
+                        // Here we get the index of the latest data set
+                        int latest = currentRegion.getData().size() - 1;
+                        // ...an the dataset as well
+                        Data latestData = currentRegion.getData().get(latest);
 
-                    latestNewCasesTextView.setText(String.valueOf(latestData.getActive()));
-                    latestTotalCuredTextView.setText(String.valueOf(latestData.getRecovered()));
-                    latestTotalDeceasedTextView.setText(String.valueOf(latestData.getDeaths()));
+                        latestNewCasesTextView.setText(String.valueOf(latestData.getActive()));
+                        latestTotalCuredTextView.setText(String.valueOf(latestData.getRecovered()));
+                        latestTotalDeceasedTextView.setText(String.valueOf(latestData.getDeaths()));
 
-                    // ...an now we get the previous dataset as well
-                    Data previousData = currentRegion.getData().get(latest);
+                        // ...an now we get the previous dataset as well
+                        Data previousData = currentRegion.getData().get(latest);
 
-                    // Here we get the second last
-                    previousNewCasesTextView.setText(String.valueOf(previousData.getActive()));
-                    previousTotalCuredTextView.setText(String.valueOf(previousData.getRecovered()));
-                    previousTotalDeceasedTextView.setText(String.valueOf(previousData.getDeaths()));
-
+                        // Here we get the second last
+                        previousNewCasesTextView.setText(String.valueOf(previousData.getActive()));
+                        previousTotalCuredTextView.setText(String.valueOf(previousData.getRecovered()));
+                        previousTotalDeceasedTextView.setText(String.valueOf(previousData.getDeaths()));
+                    }
                 }
             }
         });

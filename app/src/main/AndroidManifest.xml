@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.infocovid">
 
+    <!-- Required only when requesting background location access on Android 10 (API level 29) and higher. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -23,10 +28,6 @@
                 android:resource="@xml/info_covid_mini_widget_info" />
         </receiver>
 
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".LocationsActivity" />
-        <activity android:name=".DetailActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

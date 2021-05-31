@@ -1,5 +1,7 @@
 package com.example.infocovid.ui.locations;
 
+import android.appwidget.AppWidgetManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +25,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.infocovid.InfoCovidMiniWidget;
 import com.example.infocovid.R;
+import com.example.infocovid.datalayer.model.MySettings;
+import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.model.Region;
 import com.example.infocovid.datalayer.model.SearchData;
 import com.example.infocovid.datalayer.model.adapters.FavoriteRegionsAdapter;
@@ -49,6 +55,7 @@ public class LocationsFragment extends Fragment {
 
     // Views
     View root;
+    RelativeLayout automaticRegionRelativeLayout;
     TextView myFavoriteRegionTextView;
     ImageView myFavoriteRegionStatusImageView;
     RecyclerView favoriteRegionsRecyclerView;
@@ -101,10 +108,21 @@ public class LocationsFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_locations, container, false);
 
 
+
+        automaticRegionRelativeLayout = root.findViewById(R.id.automaticRegionWrapper);
+
         myFavoriteRegionTextView = root.findViewById(R.id.myFavoriteRegionName);
         myFavoriteRegionStatusImageView = root.findViewById(R.id.myFavoriteRegionSelectedIcon);
 
         favoriteRegionsRecyclerView = root.findViewById(R.id.favoriteRegionsRecyclerView);
+
+        MySettings mySettings = PreferencesManager.getMySettings(getContext());
+
+        if (mySettings.getAllowLocation()) {
+            automaticRegionRelativeLayout.setVisibility(View.VISIBLE);
+        } else {
+            automaticRegionRelativeLayout.setVisibility(View.GONE);
+        }
 
         locationsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<SearchData>() {
             @Override
@@ -136,9 +154,13 @@ public class LocationsFragment extends Fragment {
                     new RecyclerItemClickListener(getContext(), favoriteRegionsRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                         @Override public void onItemClick(View view, int position) {
                             locationsViewModel.setMyFavoriteRegion(position);
+                            // Here we trigger the widget update so we don't rely on the 30min update span
+                            Intent intentUpdate = new Intent(root.getContext(), InfoCovidMiniWidget.class);
+                            intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                             // @todo: check if we have to go back to the main fragment after setting the location as fovorite
                             // - uncomment line below to trigger the navigation into main fragment
                             // Navigation.findNavController(root).navigate(R.id.navigation_main);
+
                         }
 
                         @Override public void onLongItemClick(View view, int position) {

@@ -1,6 +1,8 @@
 package com.example.infocovid.ui.settings;
 
 import android.app.Activity;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -22,9 +24,16 @@ import com.example.infocovid.MainActivity;
 import com.example.infocovid.R;
 import com.example.infocovid.datalayer.datamodels.RegionList;
 import com.example.infocovid.datalayer.model.MySettings;
+import com.example.infocovid.datalayer.model.Point;
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.ui.main.MainViewModel;
+import com.example.infocovid.utils.GPSTracker;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +56,8 @@ public class SettingsFragment extends Fragment {
     Switch switchUsarUbicacion;
     Switch switchNotificaciones;
     Switch switchActivarWidget;
+
+    private GPSTracker gpsTracker;
 
 
     private SettingsViewModel settingsViewModel;
@@ -109,6 +120,48 @@ public class SettingsFragment extends Fragment {
                 // Adding the listeners for the switchers
                 switchUsarUbicacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        // first we check if we have to notify the user about the permissions
+                        if (isChecked) {
+                            // create class object
+                            gpsTracker = new GPSTracker(root.getContext());
+
+                            // check if GPS enabled
+                            if(gpsTracker.canGetLocation()){
+
+                                double latitude = gpsTracker.getLatitude();
+                                double longitude = gpsTracker.getLongitude();
+
+                                Geocoder geocoder;
+                                List<Address> addresses;
+                                geocoder = new Geocoder(root.getContext(), Locale.getDefault());
+                                ArrayList<Point> coordinatesList = new ArrayList<Point>();
+
+                                try {
+                                    addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//                                String city = addresses.get(0).getLocality();
+                                    String state = addresses.get(0).getAdminArea();
+//                                String country = addresses.get(0).getCountryName();
+//                                String postalCode = addresses.get(0).getPostalCode();
+//                                String knownName = addresses.get(0).getFeatureName();
+
+
+                                    Toast.makeText(root.getContext(), "Your Location is " + state, Toast.LENGTH_LONG).show();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                // \n is for new line
+//                                Toast.makeText(root.getContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+//
+                            }else{
+                                // can't get location
+                                // GPS or Network is not enabled
+                                // Ask user to enable GPS/network in settings
+                                gpsTracker.showSettingsAlert();
+                            }
+                        }
+
                         // Now we call the method to save the settings
                         saveSettings();
                     }
@@ -133,6 +186,7 @@ public class SettingsFragment extends Fragment {
      *
      */
     public void saveSettings() {
+
         // Getting the values of the switchers and using them to create a new settings object
         MySettings newSettings = new MySettings(switchUsarUbicacion.isChecked(), switchNotificaciones.isChecked(), switchActivarWidget.isChecked());
 

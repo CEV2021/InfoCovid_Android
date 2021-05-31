@@ -1,6 +1,7 @@
 package com.example.infocovid.datalayer.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
@@ -88,7 +89,13 @@ public class PreferencesManager {
         Gson gson = new Gson();
         Type type = new TypeToken<MySettings>() {}.getType();
 
-        return gson.fromJson(jsonString,type);
+        MySettings mySettings = gson.fromJson(jsonString,type);
+
+        if (mySettings == null) {
+            mySettings = new MySettings();
+        }
+
+        return mySettings;
     }
 
     /**
@@ -135,4 +142,5 @@ public class PreferencesManager {
         editor.putString(SEARCH_DATA,jsonString);
         editor.apply();
     }
+
 }

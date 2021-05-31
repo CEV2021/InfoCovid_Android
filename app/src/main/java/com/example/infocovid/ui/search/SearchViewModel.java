@@ -2,7 +2,12 @@ package com.example.infocovid.ui.search;
 
 import androidx.lifecycle.MutableLiveData;
 import android.app.Application;
+import android.appwidget.AppWidgetManager;
+import android.content.Intent;
+
 import androidx.lifecycle.AndroidViewModel;
+
+import com.example.infocovid.InfoCovidMiniWidget;
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.model.Region;
 import com.example.infocovid.datalayer.model.RegionList;
@@ -31,6 +36,7 @@ public class SearchViewModel extends AndroidViewModel {
         // First we get the Region we are going to handle
         // ...we start by getting the name
         String regionNameToAdd = searchData.getRegionNamesList().get(index);
+
         // .. and, based on that, we identify and pull the region from the full regions list
         RegionList regionsList = new RegionList();
         regionsList.regions = PreferencesManager.getRegions(getApplication());

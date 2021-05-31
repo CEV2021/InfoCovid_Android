@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
-    android:background="?attr/appWidgetBackgroundColor"
+    android:background="@drawable/layout_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/ThemeOverlay.InfoCovid2.AppWidgetContainer"
-    android:padding="@dimen/widget_margin"
+    android:padding="2dp"
     >
 
     <ImageView
@@ -27,7 +27,8 @@
         android:layout_toEndOf="@id/appwidget_image_covid_status"
         app:layout_constraintLeft_toRightOf="@id/appwidget_image_covid_status"
         app:layout_constraintTop_toTopOf="parent"
-        >
+        android:paddingStart="5dp"
+        android:paddingLeft="5dp">
         <TextView
             android:id="@+id/appwidget_region_name"
             android:layout_width="wrap_content"
@@ -36,6 +37,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
+            android:ellipsize="end"
+            android:maxLines="2"
             />
 
         <TextView

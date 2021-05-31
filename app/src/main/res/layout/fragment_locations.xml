@@ -76,17 +76,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myFavoriteRegionWrapper"
         />
+    <!-- Layout to contain the data for the current location -->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/automaticRegionWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favoriteRegionsLabel"
+        android:visibility="visible">
+
+        <!-- TextView to show the label for automatic location by gps -->
+        <TextView
+            android:id="@+id/automaticRegionName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:padding="2dp"
+            android:text="@string/label_automatic_location"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:ignore="RtlSymmetry" />
+
+        <!-- ImageView to show the icon for the selection status on the current location -->
+        <ImageView
+            android:id="@+id/automaticRegionSelectedIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_favorite_on"/>
+
+    </RelativeLayout>
 
     <!-- RecyclerView to contain the data for the favorite locations list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoriteRegionsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/favoriteRegionsLabel"
+        android:layout_below="@id/automaticRegionWrapper"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favoriteRegionsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/automaticRegionWrapper"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

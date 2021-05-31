@@ -1,5 +1,7 @@
 package com.example.infocovid.ui.search;
 
+import android.appwidget.AppWidgetManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +23,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.infocovid.InfoCovidMiniWidget;
 import com.example.infocovid.R;
 import com.example.infocovid.datalayer.model.SearchData;
 import com.example.infocovid.datalayer.model.adapters.FavoriteRegionsAdapter;
@@ -122,10 +125,14 @@ public class SearchFragment extends Fragment {
 
                 // Now we get the index of the region selected
                 int itemIndex = searchData.getRegionNamesList().indexOf(regionsAdapter.getItem(position));
+
                 // and we ask the model to set the new current region
                 if (searchViewModel.setMyFavoriteRegion(itemIndex)) {
                     // now we call the navigation Controller to go to the main fragment and display the current selection
                     Navigation.findNavController(root).navigate(R.id.navigation_main);
+                    // and we trigger the widget update so we don't rely on the 30min update span
+                    Intent intentUpdate = new Intent(root.getContext(), InfoCovidMiniWidget.class);
+                    intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                 }
 
 

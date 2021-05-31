@@ -87,27 +87,30 @@ public class MainFragment extends Fragment {
                     // setting the region name
                     regionNameTextView.setText(currentRegion.getName());
 
-                    // Here we get the index of the latest data set
-                    int latest = currentRegion.getData().size() - 1;
-                    // ...an the dataset as well
-                    Data latestData = currentRegion.getData().get(latest);
+                    // processing the latest data (if we have data, of course)
+                    if (currentRegion.getData().size() != 0 ) {
+                        // Here we get the index of the latest data set
+                        int latest = currentRegion.getData().size() - 1;
+                        // ...an the dataset as well
+                        Data latestData = currentRegion.getData().get(latest);
 
-                    // Now we set the image depending on the incidence
-                    // @todo: set also de image description
-                    if (currentRegion.getData().get(latest).getIncidentRate() < 50) {
-                        covidStatusImageView.setImageResource(R.mipmap.ic_greencovid);
-                    } else if (currentRegion.getData().get(latest).getIncidentRate() < 150) {
-                        covidStatusImageView.setImageResource(R.mipmap.ic_yellowcovid);
-                    } else {
-                        covidStatusImageView.setImageResource(R.mipmap.ic_redcovid);
+                        // Now we set the image depending on the incidence
+                        // @todo: set also de image description
+                        if (currentRegion.getData().get(latest).getIncidentRate() < 50) {
+                            covidStatusImageView.setImageResource(R.mipmap.ic_greencovid);
+                        } else if (currentRegion.getData().get(latest).getIncidentRate() < 150) {
+                            covidStatusImageView.setImageResource(R.mipmap.ic_yellowcovid);
+                        } else {
+                            covidStatusImageView.setImageResource(R.mipmap.ic_redcovid);
+                        }
+
+                        // and then we continue setting the data on the fragment
+                        cumulativeIncidenceTextView.setText(String.format("%.2f", latestData.getIncidentRate()));
+                        totalCasesTextView.setText(String.valueOf(latestData.getConfirmed()));
+                        newCasesTextView.setText(String.valueOf(latestData.getActive()));
+                        totalCuredTextView.setText(String.valueOf(latestData.getRecovered()));
+                        totalDeceasedTextView.setText(String.valueOf(latestData.getDeaths()));
                     }
-
-                    // and then we continue setting the data on the fragment
-                    cumulativeIncidenceTextView.setText(String.format("%.2f", latestData.getIncidentRate()));
-                    totalCasesTextView.setText(String.valueOf(latestData.getConfirmed()));
-                    newCasesTextView.setText(String.valueOf(latestData.getActive()));
-                    totalCuredTextView.setText(String.valueOf(latestData.getRecovered()));
-                    totalDeceasedTextView.setText(String.valueOf(latestData.getDeaths()));
                 }
             }
         });

@@ -7,6 +7,8 @@
     <string name="label_cases_cured">Cured:</string>
     <string name="label_cases_deceases">Deceased:</string>
 
+    <string name="label_automatic_location">Automatic (gps)</string>
+
     <string name="label_settings_location">Use my current location</string>
     <string name="label_settings_notifications">Notifications</string>
     <string name="label_settings_widget">Activate info widget</string>

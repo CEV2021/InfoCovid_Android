@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -22,6 +24,8 @@ import com.example.infocovid.datalayer.model.Region;
 import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.RegionService;
 import com.example.infocovid.datalayer.model.SearchData;
+import com.example.infocovid.utils.GPSTracker;
+import com.example.infocovid.utils.GeneralHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -31,6 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -54,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     RegionService regionService;
     NavController navController;
     boolean check = false;
+
+    // Location
+    private static final int REQUEST_CODE_PERMISSION = 2;
+    String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
+    // GPSTracker class
+    GPSTracker gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +99,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        try {
+            if (ActivityCompat.checkSelfPermission(this, mPermission) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{mPermission}, REQUEST_CODE_PERMISSION);
+
+                // If any permission above not allowed by user, this condition will execute every time, else your else part will work
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -194,16 +215,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
                 for (int i = 0; i < response.body().size(); i++) {
+
+                    response.body().get(i).setName(GeneralHelper.normalizeRegionName(response.body().get(i).getName()));
                     regionList.regions.add(i, response.body().get(i));
+                    // No need to normalize again, names are already normalized by the previous loop
                     searchData.addRegionName(response.body().get(i).getName());
 
-                    boolean check = true;
                 }
 
                 PreferencesManager.setRegions(getApplicationContext(), regionList.regions);
                 PreferencesManager.setSearchData(getApplicationContext(), searchData);
                 check = true;
-                ;
 
                 RegionList list = new RegionList();
                 list.regions = PreferencesManager.getRegions(getApplicationContext());
@@ -260,12 +282,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 SearchData searchData = PreferencesManager.getSearchData(getApplication());
                 Region currentRegion = PreferencesManager.getCurrentRegion(getApplication());
 
-                if (searchData.getRegionFromFavorites(currentRegion.getId()) == null) {
+                if (currentRegion != null && searchData.getRegionFromFavorites(currentRegion.getId()) == null) {
                     searchData.getFavoriteRegions().add(currentRegion);
                     PreferencesManager.setSearchData(getApplication(), searchData);
                     Snackbar.make(navView, "Region added to the favorites list", Snackbar.LENGTH_SHORT).show();
-                } else {
+                } else if (currentRegion == null) {
                     Snackbar.make(navView, "The region was already on the list", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(navView, "There is no region to add", Snackbar.LENGTH_SHORT).show();
                 }
 
                 return true;

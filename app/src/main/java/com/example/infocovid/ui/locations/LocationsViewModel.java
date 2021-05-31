@@ -29,25 +29,6 @@ public class LocationsViewModel extends AndroidViewModel {
         return currentData;
     }
 
-    public boolean addToFavorites(Integer index) {
-        Region regionToAdd = PreferencesManager.getRegions(getApplication()).get(index);
-        if (searchData.getMyFavoriteRegion() == null) {
-            searchData.setMyFavoriteRegion(regionToAdd);
-            PreferencesManager.setCurrentRegion(getApplication(), regionToAdd);
-        }
-
-        if (searchData.getRegionFromFavorites(regionToAdd.getId()) == null) {
-            searchData.addFavoriteRegion(regionToAdd);
-            PreferencesManager.setSearchData(getApplication(), searchData);
-            refreshData();
-            // We return TRUE because we could add the region to the favorites list
-            return true;
-        } else {
-            refreshData();
-            // We return FALSE because it was not possible to add the region to the favorites list
-            return false;
-        }
-    }
 
     public void setMyFavoriteRegion(Integer index) {
         // First we get the Region we are going to handle
