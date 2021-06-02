@@ -1,8 +1,10 @@
 package com.example.infocovid.ui.settings;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ import com.example.infocovid.datalayer.datamodels.RegionList;
 import com.example.infocovid.datalayer.model.MySettings;
 import com.example.infocovid.datalayer.model.Point;
 import com.example.infocovid.datalayer.model.PreferencesManager;
+import com.example.infocovid.datalayer.model.adapters.FavoriteRegionsAdapter;
 import com.example.infocovid.ui.main.MainViewModel;
 import com.example.infocovid.utils.GPSTracker;
 import com.google.android.material.snackbar.Snackbar;
@@ -56,7 +59,12 @@ public class SettingsFragment extends Fragment {
     Switch switchUsarUbicacion;
     Switch switchNotificaciones;
     Switch switchActivarWidget;
+    TextView dataFrom;
+    TextView avoid;
+    TextView contact;
+    TextView manual;
 
+    Activity activity;
     private GPSTracker gpsTracker;
 
 
@@ -106,6 +114,12 @@ public class SettingsFragment extends Fragment {
         switchUsarUbicacion = root.findViewById(R.id.switchUsarUbicacion);
         switchNotificaciones = root.findViewById(R.id.switchNotificaciones);
         switchActivarWidget = root.findViewById(R.id.switchActivarWidget);
+        dataFrom = root.findViewById(R.id.deDondeVienenLosDatos);
+        avoid = root.findViewById(R.id.comoEvitarContagios);
+        contact = root.findViewById(R.id.contacto);
+        manual = root.findViewById(R.id.manual);
+
+        goLink();
 
         settingsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<MySettings>() {
             @Override
@@ -180,6 +194,53 @@ public class SettingsFragment extends Fragment {
         });
 
         return root;
+    }
+
+    /**
+     * Method to display our webiste in the users browsers
+     * */
+
+    public void goLink(){
+
+            dataFrom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "http://infocovid.epizy.com/obtencion_datos.html";
+                    Uri _link  = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, _link);
+                    startActivity(intent);
+                }
+            });
+
+            avoid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "http://infocovid.epizy.com/evitar_contagios.html";
+                    Uri _link  = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, _link);
+                    startActivity(intent);
+                }
+            });
+
+            contact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "http://infocovid.epizy.com/index.html#footer";
+                    Uri _link  = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, _link);
+                    startActivity(intent);
+                }
+            });
+
+            manual.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "http://infocovid.epizy.com/manual_de_uso.html";
+                    Uri _link  = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, _link);
+                    startActivity(intent);
+                }
+            });
     }
 
     /**
