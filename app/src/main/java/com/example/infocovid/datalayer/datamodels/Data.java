@@ -6,10 +6,10 @@ public class Data {
     private int deaths;
     private int recovered;
     private int active;
-    private Double incidentRate;
+    private double incidentRate;
     private String date;
 
-    public Data(int id, int confirmed, int detahs, int recovered, int active, Double incidentRate, String date) {
+    public Data(int id, int confirmed, int detahs, int recovered, int active, double incidentRate, String date) {
         this.id = id;
         this.confirmed = confirmed;
         this.deaths = detahs;
@@ -59,11 +59,11 @@ public class Data {
         this.active = active;
     }
 
-    public Double getIncidentRate() {
+    public double getIncidentRate() {
         return incidentRate;
     }
 
-    public void setIncidentRate(Double incidentRate) {
+    public void setIncidentRate(double incidentRate) {
         this.incidentRate = incidentRate;
     }
 

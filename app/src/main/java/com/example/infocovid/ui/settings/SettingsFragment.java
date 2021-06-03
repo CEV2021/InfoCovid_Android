@@ -197,7 +197,7 @@ public class SettingsFragment extends Fragment {
     }
 
     /**
-     * Method to display our webiste in the users browsers
+     * Method to display our website's in the users browsers
      * */
 
     public void goLink(){

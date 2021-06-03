@@ -2,6 +2,7 @@ package com.example.infocovid.ui.details;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,22 @@ import com.example.infocovid.R;
 import com.example.infocovid.datalayer.model.Data;
 import com.example.infocovid.datalayer.model.Region;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ViewPortHandler;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -142,46 +154,62 @@ public class DetailsFragment extends Fragment {
      * */
     public void drawChart(Region currentRegion) {
 
-        //Metemos datos
-        ArrayList<Entry> deceasedValues = new ArrayList<>();
-        ArrayList<Entry> curedValues = new ArrayList<>();
-        ArrayList<Entry> casesValues = new ArrayList<>();
-        ArrayList<Entry> activeValues = new ArrayList<>();
+        //Save data
+        ArrayList<Entry> ia = new ArrayList<>();
+
+        //We catch the last index data array in teh currentRegion
+        int count = currentRegion.getData().size() - 1;
+
+            //Adding data to our Entries
+            ia.add(new Entry(1,covertToFloat(currentRegion.getData().get(count).getIncidentRate()) -
+                                     covertToFloat(currentRegion.getData().get(count - 7).getIncidentRate())));
+
+            ia.add(new Entry(2,covertToFloat(currentRegion.getData().get(count - 7).getIncidentRate()) -
+                                          covertToFloat(currentRegion.getData().get(count - 14).getIncidentRate())));
+
+            ia.add(new Entry(3,covertToFloat(currentRegion.getData().get(count - 14).getIncidentRate()) -
+                                            covertToFloat(currentRegion.getData().get(count - 21).getIncidentRate())));
+
+            ia.add(new Entry(4,covertToFloat(currentRegion.getData().get(count - 21).getIncidentRate()) -
+                                        covertToFloat(currentRegion.getData().get(count - 28).getIncidentRate())));
+        //Customizing the Axis
+        XAxis xAxis = covidDataLineChart.getXAxis();
+        xAxis.setValueFormatter(new MyXValueFormatter());
 
 
-        for (int i = 0; i < currentRegion.getData().size()  ; i ++) { //LLenamos array
-            deceasedValues.add(new Entry(i,currentRegion.getData().get(i).getDeaths()));
-            curedValues.add(new Entry(i,currentRegion.getData().get(i).getRecovered()));
-            casesValues.add(new Entry(i,currentRegion.getData().get(i).getConfirmed()));
-            activeValues.add(new Entry(i,currentRegion.getData().get(i).getActive()));
-        }
+        LineDataSet set1 = new LineDataSet(ia, currentRegion.getName());
 
-        LineDataSet set1 = new LineDataSet(deceasedValues, currentRegion.getName() + " deaths");
-        LineDataSet set2 = new LineDataSet(curedValues, currentRegion.getName() + " recovered");
-        LineDataSet set3 = new LineDataSet(casesValues, currentRegion.getName() + " confirmed");
-        LineDataSet set4 = new LineDataSet(activeValues, currentRegion.getName() + " active");
 
         set1.setFillAlpha(110);
         set1.setColor(Color.RED);
         set1.setLineWidth(3f);
-        set2.setFillAlpha(110);
-        set2.setColor(Color.GREEN);
-        set2.setLineWidth(3f);
-        set3.setFillAlpha(110);
-        set3.setColor(Color.BLUE);
-        set3.setLineWidth(3f);
-        set4.setFillAlpha(110);
-        set4.setColor(Color.MAGENTA);
-        set4.setLineWidth(3f);
+
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
-        dataSets.add(set2);
-        //dataSets.add(set3);
-        //dataSets.add(set4);
+
 
         LineData data = new LineData(dataSets);
 
         covidDataLineChart.setData(data);
+    }
+
+    public static Float covertToFloat(double doubleValue){
+        return (float) doubleValue;
+    }
+
+
+    /**
+     * Static Class to Format de X Axis
+     * */
+    private static class MyXValueFormatter implements IAxisValueFormatter {
+
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            axis.setLabelCount(4, true);
+
+            return "Week " + new DecimalFormat("#.##").format(value);
+        }
     }
 }
