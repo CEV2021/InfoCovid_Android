@@ -151,6 +151,15 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     /**
+     * Function to check if GPS enabled
+     * @return boolean
+     * */
+
+    public boolean isGPSEnabled() {
+        return this.isGPSEnabled;
+    }
+
+    /**
      * Function to show settings alert dialog
      * On pressing Settings button will lauch Settings Options
      * */

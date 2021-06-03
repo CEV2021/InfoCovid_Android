@@ -10,6 +10,7 @@ import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.model.Region;
 import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.SearchData;
+import com.example.infocovid.utils.GeneralHelper;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +40,14 @@ public class LocationsViewModel extends AndroidViewModel {
         // Now we store the changes on the preferences so we can later call it from other fragments in an easy way
         PreferencesManager.setSearchData(getApplication(), searchData);
         PreferencesManager.setCurrentRegion(getApplication(), regionToAdd);
+
+        // Now we call the refresh method to reload data and notify the View
+        refreshData();
+    }
+
+    public void setMyFavoriteRegionAuto() {
+        // First we get the Region we are going to handle
+        Region gpsRegion = GeneralHelper.getCurrentRegionByGPS(getApplication());
 
         // Now we call the refresh method to reload data and notify the View
         refreshData();

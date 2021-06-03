@@ -1,11 +1,14 @@
 package com.example.infocovid.ui.settings;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,12 +25,15 @@ import android.widget.Toast;
 
 import com.example.infocovid.MainActivity;
 import com.example.infocovid.R;
-import com.example.infocovid.datalayer.datamodels.RegionList;
+import com.example.infocovid.datalayer.model.RegionList;
 import com.example.infocovid.datalayer.model.MySettings;
 import com.example.infocovid.datalayer.model.Point;
 import com.example.infocovid.datalayer.model.PreferencesManager;
+import com.example.infocovid.datalayer.model.Region;
+import com.example.infocovid.datalayer.model.SearchData;
 import com.example.infocovid.ui.main.MainViewModel;
 import com.example.infocovid.utils.GPSTracker;
+import com.example.infocovid.utils.GeneralHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -62,6 +68,9 @@ public class SettingsFragment extends Fragment {
 
     private SettingsViewModel settingsViewModel;
 
+    // Location
+    private static final int REQUEST_CODE_PERMISSION = 2;
+    String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -120,50 +129,41 @@ public class SettingsFragment extends Fragment {
                 // Adding the listeners for the switchers
                 switchUsarUbicacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        Region gpsRegion = null;
                         // first we check if we have to notify the user about the permissions
                         if (isChecked) {
-                            // create class object
-                            gpsTracker = new GPSTracker(root.getContext());
+                            try {
+                                if (ActivityCompat.checkSelfPermission(root.getContext(), mPermission) != PackageManager.PERMISSION_GRANTED) {
 
-                            // check if GPS enabled
-                            if(gpsTracker.canGetLocation()){
-
-                                double latitude = gpsTracker.getLatitude();
-                                double longitude = gpsTracker.getLongitude();
-
-                                Geocoder geocoder;
-                                List<Address> addresses;
-                                geocoder = new Geocoder(root.getContext(), Locale.getDefault());
-                                ArrayList<Point> coordinatesList = new ArrayList<Point>();
-
-                                try {
-                                    addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//                                String city = addresses.get(0).getLocality();
-                                    String state = addresses.get(0).getAdminArea();
-//                                String country = addresses.get(0).getCountryName();
-//                                String postalCode = addresses.get(0).getPostalCode();
-//                                String knownName = addresses.get(0).getFeatureName();
-
-
-                                    Toast.makeText(root.getContext(), "Your Location is " + state, Toast.LENGTH_LONG).show();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{mPermission}, REQUEST_CODE_PERMISSION);
+                                    // If any permission above not allowed by user, this condition will execute every time, else your else part will work
                                 }
-
-                                // \n is for new line
-//                                Toast.makeText(root.getContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-//
-                            }else{
-                                // can't get location
-                                // GPS or Network is not enabled
-                                // Ask user to enable GPS/network in settings
-                                gpsTracker.showSettingsAlert();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
+
+                            try {
+                                if (ActivityCompat.checkSelfPermission(root.getContext(), mPermission) == PackageManager.PERMISSION_GRANTED) {
+
+                                    gpsRegion = GeneralHelper.getCurrentRegionByGPS(root.getContext());
+
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        } else {
+                            GeneralHelper.removeCurrentRegionByGPS(root.getContext());
                         }
 
-                        // Now we call the method to save the settings
-                        saveSettings();
+                        if (isChecked && gpsRegion == null) {
+                            switchUsarUbicacion.setChecked(false);
+                        } else {
+                            // Now we call the method to save the settings
+                            saveSettings();
+                        }
+
                     }
                 });
                 switchNotificaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

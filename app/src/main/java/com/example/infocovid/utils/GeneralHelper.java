@@ -18,6 +18,10 @@ import android.widget.Toast;
 
 import com.example.infocovid.InfoCovidMiniWidget;
 import com.example.infocovid.datalayer.model.Point;
+import com.example.infocovid.datalayer.model.PreferencesManager;
+import com.example.infocovid.datalayer.model.Region;
+import com.example.infocovid.datalayer.model.RegionList;
+import com.example.infocovid.datalayer.model.SearchData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +29,78 @@ import java.util.List;
 import java.util.Locale;
 
 public class GeneralHelper {
+
+    public static Region getCurrentRegionByGPS(Context context) {
+        Region gpsRegion = null;
+
+        // create class object
+        GPSTracker gpsTracker = new GPSTracker(context);
+
+        // check if GPS enabled
+        if(gpsTracker.canGetLocation()){
+
+            double latitude = gpsTracker.getLatitude();
+            double longitude = gpsTracker.getLongitude();
+
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(context, Locale.getDefault());
+            ArrayList<Point> coordinatesList = new ArrayList<Point>();
+
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//                                String city = addresses.get(0).getLocality();
+                String regionName = addresses.get(0).getAdminArea();
+//
+                RegionList regionList = new RegionList();
+                regionList.regions = PreferencesManager.getRegions(context);
+                gpsRegion = regionList.getRegionByName(regionName);
+
+                if (gpsRegion != null) {
+                    // setting the id to -1 so we now it's not a regular region
+                    gpsRegion.setId(-1);
+                    PreferencesManager.setCurrentRegion(context, gpsRegion);
+                    // setting the gps region as the favorite region
+                    SearchData searchData = PreferencesManager.getSearchData(context);
+                    if (searchData == null) {
+                        searchData = new SearchData();
+                    }
+                    searchData.setMyFavoriteRegion(gpsRegion);
+                    PreferencesManager.setSearchData(context, searchData);
+                } else {
+                    // debug message for when it fails
+                    Log.e("GPS Region", "Error: could not set region as >> " + address);
+                }
+
+                // debug message to show when the location is calculated
+                Toast.makeText(context, "Your Location is " + regionName, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gpsTracker.showSettingsAlert();
+        }
+
+        return gpsRegion;
+    }
+
+    public static Region removeCurrentRegionByGPS(Context context) {
+        Region gpsRegion = null;
+        PreferencesManager.setCurrentRegion(context, gpsRegion);
+        SearchData searchData = PreferencesManager.getSearchData(context);
+        if (searchData == null) {
+            searchData = new SearchData();
+        }
+        searchData.setMyFavoriteRegion(gpsRegion);
+        PreferencesManager.setSearchData(context, searchData);
+
+        return gpsRegion;
+    }
 
     public static void coordinatesTester(View view) {
 

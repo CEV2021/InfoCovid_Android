@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.infocovid.datalayer.model.PreferencesManager;
 import com.example.infocovid.datalayer.datamodels.RegionList;
 import com.example.infocovid.datalayer.model.MySettings;
+import com.example.infocovid.datalayer.model.Region;
+import com.example.infocovid.datalayer.model.SearchData;
 
 import org.jetbrains.annotations.NotNull;
 public class SettingsViewModel extends AndroidViewModel {
@@ -28,6 +30,17 @@ public class SettingsViewModel extends AndroidViewModel {
 
     public void setData(MySettings newSettings) {
         PreferencesManager.setMySettings(getApplication(), newSettings);
+
+        // setting a default favorite region if we have some on the favorites list
+        if (!newSettings.getAllowLocation()) {
+            SearchData searchData = PreferencesManager.getSearchData(getApplication());
+            if (searchData != null && searchData.getFavoriteRegions() != null && searchData.getFavoriteRegions().size() > 0) {
+                searchData.setMyFavoriteRegion(searchData.getFavoriteRegions().get(0));
+                PreferencesManager.setSearchData(getApplication(), searchData);
+                PreferencesManager.setCurrentRegion(getApplication(), searchData.getFavoriteRegions().get(0));
+            }
+        }
+
         refreshData();
     }
 

@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Location
     private static final int REQUEST_CODE_PERMISSION = 2;
     String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
+
     // GPSTracker class
     GPSTracker gps;
 
@@ -103,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (ActivityCompat.checkSelfPermission(this, mPermission) != PackageManager.PERMISSION_GRANTED) {
 
                 ActivityCompat.requestPermissions(this, new String[]{mPermission}, REQUEST_CODE_PERMISSION);
-
                 // If any permission above not allowed by user, this condition will execute every time, else your else part will work
             }
         } catch (Exception e) {
@@ -281,15 +281,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case R.id.addItem:
                 SearchData searchData = PreferencesManager.getSearchData(getApplication());
                 Region currentRegion = PreferencesManager.getCurrentRegion(getApplication());
+                // Preparation, in case we are in an automatic gps mode
+                if (currentRegion != null && currentRegion.getId() < 0) {
+                    RegionList regionList = new RegionList();
+                    regionList.regions = PreferencesManager.getRegions(getApplication());
+
+                    Region newCurrentRegion = null;
+                    newCurrentRegion = regionList.getRegionByName(currentRegion.getName());
+                    if (newCurrentRegion != null) {
+                        currentRegion = newCurrentRegion;
+                    }
+                }
 
                 if (currentRegion != null && searchData.getRegionFromFavorites(currentRegion.getId()) == null) {
+
                     searchData.getFavoriteRegions().add(currentRegion);
                     PreferencesManager.setSearchData(getApplication(), searchData);
                     Snackbar.make(navView, "Region added to the favorites list", Snackbar.LENGTH_SHORT).show();
                 } else if (currentRegion == null) {
-                    Snackbar.make(navView, "The region was already on the list", Snackbar.LENGTH_SHORT).show();
-                } else {
                     Snackbar.make(navView, "There is no region to add", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(navView, "The region was already on the list", Snackbar.LENGTH_SHORT).show();
                 }
 
                 return true;

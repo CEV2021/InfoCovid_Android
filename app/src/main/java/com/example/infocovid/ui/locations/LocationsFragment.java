@@ -56,6 +56,8 @@ public class LocationsFragment extends Fragment {
     // Views
     View root;
     RelativeLayout automaticRegionRelativeLayout;
+    ImageView automaticRegionStatusImageView;
+
     TextView myFavoriteRegionTextView;
     ImageView myFavoriteRegionStatusImageView;
     RecyclerView favoriteRegionsRecyclerView;
@@ -108,8 +110,14 @@ public class LocationsFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_locations, container, false);
 
 
-
         automaticRegionRelativeLayout = root.findViewById(R.id.automaticRegionWrapper);
+        automaticRegionStatusImageView = root.findViewById(R.id.automaticRegionSelectedIcon);
+        automaticRegionRelativeLayout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                locationsViewModel.setMyFavoriteRegionAuto();
+            }
+        });
 
         myFavoriteRegionTextView = root.findViewById(R.id.myFavoriteRegionName);
         myFavoriteRegionStatusImageView = root.findViewById(R.id.myFavoriteRegionSelectedIcon);
@@ -127,10 +135,21 @@ public class LocationsFragment extends Fragment {
         locationsViewModel.getData().observe(getViewLifecycleOwner(), new Observer<SearchData>() {
             @Override
             public void onChanged(@Nullable SearchData searchData) {
-                if (searchData != null && searchData.getFavoriteRegions().size() > 0) {
+
+                // Setting the value of the current region in case we have one
+                if (searchData != null && searchData.getMyFavoriteRegion() != null) {
                     myFavoriteRegion = searchData.getMyFavoriteRegion();
 
                     myFavoriteRegionTextView.setText(myFavoriteRegion.getName());
+                    if (myFavoriteRegion.getId() < 0) {
+                        automaticRegionStatusImageView.setImageResource(R.drawable.ic_favorite_on);
+                    } else {
+                        automaticRegionStatusImageView.setImageResource(R.drawable.ic_favorite_off);
+                    }
+                }
+
+                // Processing the list of favorites
+                if (searchData != null && searchData.getFavoriteRegions().size() > 0) {
 
                     processFavoriteRegionsData(searchData);
                 }
@@ -151,9 +170,11 @@ public class LocationsFragment extends Fragment {
             favoriteRegionsRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
             favoriteRegionsRecyclerView.setClickable(true);
             favoriteRegionsRecyclerView.addOnItemTouchListener(
-                    new RecyclerItemClickListener(getContext(), favoriteRegionsRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                        @Override public void onItemClick(View view, int position) {
+                    new RecyclerItemClickListener(getContext(), favoriteRegionsRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
                             locationsViewModel.setMyFavoriteRegion(position);
+
                             // Here we trigger the widget update so we don't rely on the 30min update span
                             Intent intentUpdate = new Intent(root.getContext(), InfoCovidMiniWidget.class);
                             intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -163,7 +184,8 @@ public class LocationsFragment extends Fragment {
 
                         }
 
-                        @Override public void onLongItemClick(View view, int position) {
+                        @Override
+                        public void onLongItemClick(View view, int position) {
                             // do whatever
                         }
                     })
