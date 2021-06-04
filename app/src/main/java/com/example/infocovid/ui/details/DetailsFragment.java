@@ -17,7 +17,9 @@ import com.example.infocovid.datalayer.model.Data;
 import com.example.infocovid.datalayer.model.Region;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -156,45 +158,85 @@ public class DetailsFragment extends Fragment {
 
         //Save data
         ArrayList<Entry> ia = new ArrayList<>();
-
         //We catch the last index data array in teh currentRegion
         int count = currentRegion.getData().size() - 1;
 
-            //Adding data to our Entries
-            ia.add(new Entry(1,covertToFloat(currentRegion.getData().get(count).getIncidentRate()) -
-                                     covertToFloat(currentRegion.getData().get(count - 7).getIncidentRate())));
+        //We initialize our String array with Date
 
-            ia.add(new Entry(2,covertToFloat(currentRegion.getData().get(count - 7).getIncidentRate()) -
-                                          covertToFloat(currentRegion.getData().get(count - 14).getIncidentRate())));
+        String[] date = new String[4];
+        date[3] = currentRegion.getData().get(count).getDate();
+        date[2] = currentRegion.getData().get(count - 7).getDate();
+        date[1] = currentRegion.getData().get(count - 14).getDate();
+        date[0] = currentRegion.getData().get(count - 21).getDate();
 
-            ia.add(new Entry(3,covertToFloat(currentRegion.getData().get(count - 14).getIncidentRate()) -
-                                            covertToFloat(currentRegion.getData().get(count - 21).getIncidentRate())));
+        double[] actualIa = new double[4];
+        actualIa[0] = currentRegion.getData().get(count - 21).getIncidentRate() - currentRegion.getData().get(count - 28).getIncidentRate();
+        actualIa[1] = currentRegion.getData().get(count - 14).getIncidentRate() - currentRegion.getData().get(count - 21).getIncidentRate();
+        actualIa[2] = currentRegion.getData().get(count - 7).getIncidentRate() - currentRegion.getData().get(count - 14).getIncidentRate();
+        actualIa[3] = currentRegion.getData().get(count).getIncidentRate() - currentRegion.getData().get(count - 7).getIncidentRate();
 
-            ia.add(new Entry(4,covertToFloat(currentRegion.getData().get(count - 21).getIncidentRate()) -
-                                        covertToFloat(currentRegion.getData().get(count - 28).getIncidentRate())));
+        MyXValueFormatter xValueFormatter = new MyXValueFormatter(date);
+
+        //Adding data to our Entries
+
+        ia.add(new Entry(0,doubleToFloat(currentRegion.getData().get(count - 21).getIncidentRate()) -
+                doubleToFloat(currentRegion.getData().get(count - 28).getIncidentRate())));
+        ia.add(new Entry(1,doubleToFloat(currentRegion.getData().get(count - 14).getIncidentRate()) -
+                doubleToFloat(currentRegion.getData().get(count - 21).getIncidentRate())));
+        ia.add(new Entry(2, doubleToFloat(currentRegion.getData().get(count - 7).getIncidentRate()) -
+                doubleToFloat(currentRegion.getData().get(count - 14).getIncidentRate())));
+        ia.add(new Entry(3, doubleToFloat(currentRegion.getData().get(count).getIncidentRate()) -
+                doubleToFloat(currentRegion.getData().get(count - 7).getIncidentRate())));
+
         //Customizing the Axis
         XAxis xAxis = covidDataLineChart.getXAxis();
-        xAxis.setValueFormatter(new MyXValueFormatter());
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextColor(Color.BLACK);
+        xAxis.setTextSize(10);
+        xAxis.setValueFormatter(xValueFormatter);
+
+        YAxis rightAxis = covidDataLineChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
 
 
         LineDataSet set1 = new LineDataSet(ia, currentRegion.getName());
 
+        set1.setLineWidth(2f);
+        set1.setColor(Color.BLACK);
+        set1.setDrawValues(false);
+        set1.setDrawFilled(true);
+        set1.setDrawCircles(true);
+        set1.setDrawCircleHole(true);
+        set1.setCircleColor(Color.GRAY);
+        set1.setCircleColorHole(Color.WHITE);
+        set1.setCircleRadius(8);
+        set1.setCircleHoleRadius(6);
 
-        set1.setFillAlpha(110);
-        set1.setColor(Color.RED);
-        set1.setLineWidth(3f);
-
+        if (actualIa[0] < 50) {
+            set1.setFillColor(Color.GREEN);
+        } else if (actualIa[1] < 150) {
+            set1.setFillColor(Color.YELLOW);
+        } else {
+            set1.setFillColor(Color.RED);
+        }
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 
 
+
         LineData data = new LineData(dataSets);
 
+        Description description = new Description();
+        description.setText("");
+        covidDataLineChart.setDescription(description);
+        covidDataLineChart.setDoubleTapToZoomEnabled(false);
+        covidDataLineChart.setTouchEnabled(false);
         covidDataLineChart.setData(data);
     }
 
-    public static Float covertToFloat(double doubleValue){
+    public static Float doubleToFloat(double doubleValue){
         return (float) doubleValue;
     }
 
@@ -204,12 +246,17 @@ public class DetailsFragment extends Fragment {
      * */
     private static class MyXValueFormatter implements IAxisValueFormatter {
 
+        String[] date;
+
+        public MyXValueFormatter(String[] date){
+            this.date = date;
+        }
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             axis.setLabelCount(4, true);
 
-            return "Week " + new DecimalFormat("#.##").format(value);
+            return this.date[(int) value];
         }
     }
 }
