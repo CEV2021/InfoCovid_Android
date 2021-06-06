@@ -1,6 +1,7 @@
 package com.example.infocovid.ui.details;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,16 +26,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,12 +55,12 @@ public class DetailsFragment extends Fragment {
     View root;
     LineChart covidDataLineChart;
 
-    TextView latestNewCasesTextView;
-    TextView latestTotalCuredTextView;
+    TextView latestActiveCases;
+    TextView latestRegionNewCases;
     TextView latestTotalDeceasedTextView;
 
-    TextView previousNewCasesTextView;
-    TextView previousTotalCuredTextView;
+    TextView previousRegionDataActiveCases;
+    TextView previousRegionDataRegionNewCases;
     TextView previousTotalDeceasedTextView;
 
     // View model for this fragment
@@ -76,12 +71,12 @@ public class DetailsFragment extends Fragment {
 
         root = inflater.inflate(R.layout.fragment_details, container, false);
 
-        latestNewCasesTextView = root.findViewById(R.id.latestRegionDataNewCasesValue);
-        latestTotalCuredTextView = root.findViewById(R.id.latestRegionDataTotalCuredValue);
+        latestActiveCases = root.findViewById(R.id.latestRegionDataNewCasesValue);
+        latestRegionNewCases = root.findViewById(R.id.latestRegionDataTotalCuredValue);
         latestTotalDeceasedTextView = root.findViewById(R.id.latestRegionDataTotalDeceasedValue);
 
-        previousNewCasesTextView = root.findViewById(R.id.previousRegionDataNewCasesValue);
-        previousTotalCuredTextView = root.findViewById(R.id.previousRegionDataTotalCuredValue);
+        previousRegionDataActiveCases = root.findViewById(R.id.previousRegionDataNewCasesValue);
+        previousRegionDataRegionNewCases = root.findViewById(R.id.previousRegionDataTotalCuredValue);
         previousTotalDeceasedTextView = root.findViewById(R.id.previousRegionDataTotalDeceasedValue);
 
         covidDataLineChart = root.findViewById(R.id.covidDataLineChart);
@@ -100,16 +95,16 @@ public class DetailsFragment extends Fragment {
                         // ...an the dataset as well
                         Data latestData = currentRegion.getData().get(latest);
 
-                        latestNewCasesTextView.setText(String.valueOf(latestData.getActive()));
-                        latestTotalCuredTextView.setText(String.valueOf(latestData.getRecovered()));
+                        latestActiveCases.setText(String.valueOf(latestData.getActive()));
+                        latestRegionNewCases.setText(String.valueOf(latestData.getActive() - currentRegion.getData().get(latest - 2).getActive()));
                         latestTotalDeceasedTextView.setText(String.valueOf(latestData.getDeaths()));
 
                         // ...an now we get the previous dataset as well
-                        Data previousData = currentRegion.getData().get(latest);
+                        Data previousData = currentRegion.getData().get(latest - 21);
 
                         // Here we get the second last
-                        previousNewCasesTextView.setText(String.valueOf(previousData.getActive()));
-                        previousTotalCuredTextView.setText(String.valueOf(previousData.getRecovered()));
+                        previousRegionDataActiveCases.setText(String.valueOf(previousData.getActive()));
+                        previousRegionDataRegionNewCases.setText(String.valueOf((previousData.getActive() - currentRegion.getData().get(latest - 23).getActive() )));
                         previousTotalDeceasedTextView.setText(String.valueOf(previousData.getDeaths()));
                     }
                 }
@@ -164,16 +159,10 @@ public class DetailsFragment extends Fragment {
         //We initialize our String array with Date
 
         String[] date = new String[4];
-        date[3] = currentRegion.getData().get(count).getDate();
-        date[2] = currentRegion.getData().get(count - 7).getDate();
-        date[1] = currentRegion.getData().get(count - 14).getDate();
         date[0] = currentRegion.getData().get(count - 21).getDate();
-
-        double[] actualIa = new double[4];
-        actualIa[0] = currentRegion.getData().get(count - 21).getIncidentRate() - currentRegion.getData().get(count - 28).getIncidentRate();
-        actualIa[1] = currentRegion.getData().get(count - 14).getIncidentRate() - currentRegion.getData().get(count - 21).getIncidentRate();
-        actualIa[2] = currentRegion.getData().get(count - 7).getIncidentRate() - currentRegion.getData().get(count - 14).getIncidentRate();
-        actualIa[3] = currentRegion.getData().get(count).getIncidentRate() - currentRegion.getData().get(count - 7).getIncidentRate();
+        date[1] = currentRegion.getData().get(count - 14).getDate();
+        date[2] = currentRegion.getData().get(count - 7).getDate();
+        date[3] = currentRegion.getData().get(count).getDate();
 
         MyXValueFormatter xValueFormatter = new MyXValueFormatter(date);
 
@@ -212,13 +201,19 @@ public class DetailsFragment extends Fragment {
         set1.setCircleColorHole(Color.WHITE);
         set1.setCircleRadius(8);
         set1.setCircleHoleRadius(6);
+        set1.setDrawFilled(true);
 
-        if (actualIa[0] < 50) {
-            set1.setFillColor(Color.GREEN);
-        } else if (actualIa[1] < 150) {
-            set1.setFillColor(Color.YELLOW);
+        // If ia alert is high or low we change the FillColor of the LineChart
+        double actualIa  = currentRegion.getData().get(count).getIncidentRate() - currentRegion.getData().get(count - 14).getIncidentRate();
+        if (actualIa < 50) {
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradient_green);
+            set1.setFillDrawable(drawable);
+        } else if (actualIa < 150) {
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradient_yellow);
+            set1.setFillDrawable(drawable);
         } else {
-            set1.setFillColor(Color.RED);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradient_red);
+            set1.setFillDrawable(drawable);
         }
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -236,6 +231,9 @@ public class DetailsFragment extends Fragment {
         covidDataLineChart.setData(data);
     }
 
+    /**
+     * Method to convert Double to Float
+     * */
     public static Float doubleToFloat(double doubleValue){
         return (float) doubleValue;
     }

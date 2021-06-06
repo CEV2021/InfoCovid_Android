@@ -61,12 +61,12 @@
 
             <!-- TextView to show the label for new cases -->
             <TextView
-                android:id="@+id/latestRegionDataNewCasesLabel"
+                android:id="@+id/latestRegionDataActiveCases"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="@string/label_cases_new"
+                android:text="@string/active_cases"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -97,12 +97,12 @@
 
             <!-- TextView to show the label for total cured -->
             <TextView
-                android:id="@+id/latestRegionDataTotalCuredLabel"
+                android:id="@+id/latestRegionNewCases"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="@string/label_cases_cured"
+                android:text="@string/label_cases_new"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -199,12 +199,12 @@
 
             <!-- TextView to show the label for total new -->
             <TextView
-                android:id="@+id/previousRegionDataNewCasesLabel"
+                android:id="@+id/previousRegionDataActiveCases"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="@string/label_cases_new"
+                android:text="@string/active_cases"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -235,12 +235,12 @@
 
             <!-- TextView to show the label for cured cases -->
             <TextView
-                android:id="@+id/previousRegionDataTotalCuredLabel"
+                android:id="@+id/previousRegionDataRegionNewCases"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="30dp"
                 android:gravity="center"
-                android:text="@string/label_cases_cured"
+                android:text="@string/label_cases_new"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
