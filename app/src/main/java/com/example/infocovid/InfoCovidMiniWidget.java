@@ -33,18 +33,21 @@ public class InfoCovidMiniWidget extends AppWidgetProvider {
 
         if (currentRegion != null) {
             // Here we get the latest data set
-            int latest = currentRegion.getData().size() - 1;
+            int latestIndex = currentRegion.getData().size() - 1;
+            //Here we get the actual IA
+            double actualIa = currentRegion.getData().get(latestIndex).getIncidentRate() -
+                              currentRegion.getData().get(latestIndex - 14).getIncidentRate();
             // Now we set the image depending on the incident
-            if (currentRegion.getData().get(latest).getIncidentRate() < 50) {
+            if (actualIa < 50) {
                 remoteView.setImageViewResource(R.id.appwidget_image_covid_status, R.mipmap.ic_greencovid);
-            } else if (currentRegion.getData().get(latest).getIncidentRate() < 150) {
+            } else if (actualIa < 150) {
                 remoteView.setImageViewResource(R.id.appwidget_image_covid_status, R.mipmap.ic_yellowcovid);
             } else {
                 remoteView.setImageViewResource(R.id.appwidget_image_covid_status, R.mipmap.ic_redcovid);
             }
             // And here we set the values for the textViews for Region name and the number on incidence rate
             remoteView.setTextViewText(R.id.appwidget_region_name, currentRegion.getName());
-            remoteView.setTextViewText(R.id.appwidget_region_ia_value, String.format("%.2f", currentRegion.getData().get(latest).getIncidentRate()));
+            remoteView.setTextViewText(R.id.appwidget_region_ia_value, String.format("%.2f", actualIa ));
         } else {
 
         }
