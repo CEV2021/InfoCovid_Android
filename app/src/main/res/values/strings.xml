@@ -4,8 +4,9 @@
     <string name="label_incidence_ant">*Cases per 100,000 inhabitants</string>
     <string name="label_cases_total">Total cases:</string>
     <string name="label_cases_new">New cases:</string>
-    <string name="label_cases_cured">Cured:</string>
+    <string name="active_cases">Active cases:</string>
     <string name="label_cases_deceases">Deceased:</string>
+    <string name="label_cases_cured">Cured:</string>
 
     <string name="label_automatic_location">Automatic (gps)</string>
 

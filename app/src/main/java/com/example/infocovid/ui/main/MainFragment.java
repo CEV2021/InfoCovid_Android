@@ -2,6 +2,7 @@ package com.example.infocovid.ui.main;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,7 @@ public class MainFragment extends Fragment {
         // - every time the model gets changed and notified, then this fragment gets drawn again
         // - this way we don't have to handle data changes by ourselves
         mainViewModel.getData().observe(getViewLifecycleOwner(), new Observer<Region>() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onChanged(@Nullable Region currentRegion) {
 
@@ -94,18 +96,21 @@ public class MainFragment extends Fragment {
                         // ...an the dataset as well
                         Data latestData = currentRegion.getData().get(latest);
 
+                        //Calculating de actual incident rate
+                        double actualIa = calculateIncidentRate(currentRegion, latest);
+
                         // Now we set the image depending on the incidence
                         // @todo: set also de image description
-                        if (currentRegion.getData().get(latest).getIncidentRate() < 50) {
+                        if (actualIa < 50) {
                             covidStatusImageView.setImageResource(R.mipmap.ic_greencovid);
-                        } else if (currentRegion.getData().get(latest).getIncidentRate() < 150) {
+                        } else if (actualIa < 150) {
                             covidStatusImageView.setImageResource(R.mipmap.ic_yellowcovid);
                         } else {
                             covidStatusImageView.setImageResource(R.mipmap.ic_redcovid);
                         }
 
                         // and then we continue setting the data on the fragment
-                        cumulativeIncidenceTextView.setText(String.format("%.2f", latestData.getIncidentRate()));
+                        cumulativeIncidenceTextView.setText(String.format("%.2f", actualIa ));
                         totalCasesTextView.setText(String.valueOf(latestData.getConfirmed()));
                         newCasesTextView.setText(String.valueOf(latestData.getActive()));
                         totalCuredTextView.setText(String.valueOf(latestData.getRecovered()));
@@ -148,5 +153,12 @@ public class MainFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    /**
+     * Calculating incident rate with 14 days ago data to display a correct value
+     * **/
+    public double calculateIncidentRate(Region currentRegion, int latest){
+        return currentRegion.getData().get(latest).getIncidentRate() - currentRegion.getData().get(latest - 14).getIncidentRate();
     }
 }
