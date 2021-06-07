@@ -74,7 +74,7 @@ public class GeneralHelper {
                 }
 
                 // debug message to show when the location is calculated
-                Toast.makeText(context, "Your Location is " + regionName, Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "Your Location is " + regionName, Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }

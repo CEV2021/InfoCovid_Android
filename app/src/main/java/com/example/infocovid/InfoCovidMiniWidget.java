@@ -3,8 +3,10 @@ package com.example.infocovid;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import com.example.infocovid.datalayer.model.PreferencesManager;
@@ -16,7 +18,6 @@ import com.example.infocovid.datalayer.model.Region;
 public class InfoCovidMiniWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-
 
 
         // Creating the Intent for the MainActivity
@@ -55,24 +56,11 @@ public class InfoCovidMiniWidget extends AppWidgetProvider {
 
         // ---------------------------------
 
-
-//        Intent clickServiceIntent = new Intent(context, ClickIntentService.class);
-//        clickServiceIntent.setAction(ClickIntentService.ACTION_CLICK);
-//
-//        PendingIntent pendingClickServiceIntent = PendingIntent.getService(context, 0, clickServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        remoteView.setOnClickPendingIntent(R.id.appwidget_text, pendingClickServiceIntent);
-//
-//        int clicks = context.getSharedPreferences("Preferences", context.MODE_PRIVATE).getInt("clicks", 0);
-//
-//        remoteView.setTextViewText(R.id.appwidget_text, String.valueOf(clicks));
-//
-//        // Instruct the widget manager to update the widget
-//        appWidgetManager.updateAppWidget(appWidgetId, remoteView);
-
-
-        // ---------------------------------
-
+        //for refresh button
+        Intent refresh = new Intent(context, InfoCovidMiniWidget.class);
+        PendingIntent refreshIntent = PendingIntent.getBroadcast(context, 0, refresh, 0);
+        remoteView.setOnClickPendingIntent(R.id.appwidget_image_reloadd, refreshIntent);
+        appWidgetManager.updateAppWidget(new ComponentName(context, InfoCovidMiniWidget.class), remoteView);
 
     }
 
